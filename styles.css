@@ -376,7 +376,6 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   display: flex;
   flex-direction: column;
   gap: var(--space-sm);
-  max-width: 46rem;
 }
 .hero .hero__title {
   margin: 0;
@@ -387,13 +386,16 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .hero__break { display: none; }
 .hero__lead {
   margin: 0;
-  max-width: 48ch;
+  max-width: none;
   color: #ffffff;
   font-size: var(--fs-large);
   line-height: var(--lh-large);
   letter-spacing: var(--ls-large);
   text-wrap: balance;
 }
+/* Each sentence of the lead holds its own line on desktop; the breaks are
+   switched off on a phone so the three sentences wrap as one paragraph. */
+.hero__lead-break { display: inline; }
 .text-balanced { text-wrap: balance; }
 
 /* The sticky mobile bar already carries the mark, so the hero drops its own. */
@@ -407,6 +409,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .hero__inner { justify-content: flex-end; gap: var(--space-md); }
   .hero__copy { gap: var(--space-xs); }
   .hero__break { display: inline; }
+  .hero__lead-break { display: none; }
 }
 
 /* Last resort: below this width the title cannot stay on one line without

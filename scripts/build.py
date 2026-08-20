@@ -460,6 +460,11 @@ def page(chapters: list[dict]) -> str:
     hero_lead = collapse_space_runs(
         f"When to train, what to learn, how to ship a LoRA on LTX. {intro}".strip()
     )
+    # One sentence per line on desktop. CSS hides the breaks below 900px, where
+    # the sentences run together as a single wrapping paragraph.
+    hero_lead_html = ' <br class="hero__lead-break">'.join(
+        html_lib.escape(sentence) for sentence in re.split(r"(?<=\.)\s+", hero_lead)
+    )
     return f'''<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -528,7 +533,7 @@ def page(chapters: list[dict]) -> str:
         </a>
         <div class="hero__copy">
           <h1 class="hero__title h1-display">LoRA <br class="hero__break">training guide</h1>
-          <p class="hero__lead text-balanced">{html_lib.escape(hero_lead)}</p>
+          <p class="hero__lead text-balanced">{hero_lead_html}</p>
         </div>
       </div>
     </section>

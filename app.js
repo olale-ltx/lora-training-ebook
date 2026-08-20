@@ -38,7 +38,7 @@ const jumpTo = (target) => {
 };
 
 const setupInPageJumps = () => {
-  const scopes = "[data-mobile-header], .rail, .whats-inside, .hero";
+  const scopes = "[data-mobile-header], .rail, .whats-inside, .hero, .back-to-top";
   document.addEventListener("click", (event) => {
     if (event.defaultPrevented || event.button !== 0) return;
     if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;

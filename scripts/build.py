@@ -26,6 +26,9 @@ CHAPTERS = [
 FLIPPED_COVERS = {"ch6"}
 # Override the default assets/chapterN.mp4 path when a chapter has a later cut.
 COVER_VIDEOS = {"ch2": "assets/chapter2-upd.mp4"}
+# Chapters that ship a second cut for phones. CSS shows one of the pair at a
+# time and setupCoverVideos pauses whichever is hidden.
+MOBILE_COVERS = {"ch2": {"src": "assets/hero.mp4", "poster": "assets/hero-poster.jpg"}}
 
 
 def asset_version(name: str) -> str:
@@ -382,7 +385,7 @@ def nav_items_html(chapters: list[dict], kind: str) -> str:
       <span class="mh__title">{html_lib.escape(ch["name"])}</span>
     </a>
     <button class="mh__expand" type="button" aria-label="Show sub-sections of {html_lib.escape(ch["name"])}" aria-expanded="false" aria-controls="mh-sub-{ch["id"]}" data-mh-expand="{ch["id"]}">
-      <svg class="mh__chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 5l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      <svg class="mh__chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 5l4 4 4-4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
     </button>
   </div>
   <div id="mh-sub-{ch["id"]}" class="mh__sections" aria-hidden="true" data-mh-sections="{ch["id"]}">
@@ -421,12 +424,22 @@ def chapter_html(ch: dict) -> str:
     poster = f' poster="{html_lib.escape(cover)}"' if cover else ""
     flipped = " chapter__video--flipped" if ch["id"] in FLIPPED_COVERS else ""
     src = COVER_VIDEOS.get(ch["id"]) or f'assets/{ch["id"].replace("ch", "chapter")}.mp4'
-    return f'''<article id="{ch["id"]}" class="chapter">
-  <header class="chapter__cover">
-    <video class="chapter__video{flipped}"{poster} autoplay muted loop playsinline
+    mobile = MOBILE_COVERS.get(ch["id"])
+    variant = " chapter__video--desktop" if mobile else ""
+    videos = f'''<video class="chapter__video{flipped}{variant}"{poster} autoplay muted loop playsinline
            preload="none" disablepictureinpicture aria-hidden="true" tabindex="-1" data-cover-video>
       <source src="{src}" type="video/mp4">
-    </video>
+    </video>'''
+    if mobile:
+        mobile_poster = f' poster="{html_lib.escape(mobile["poster"])}"' if mobile.get("poster") else ""
+        videos += f'''
+    <video class="chapter__video{flipped} chapter__video--mobile"{mobile_poster} autoplay muted loop playsinline
+           preload="none" disablepictureinpicture aria-hidden="true" tabindex="-1" data-cover-video>
+      <source src="{mobile["src"]}" type="video/mp4">
+    </video>'''
+    return f'''<article id="{ch["id"]}" class="chapter">
+  <header class="chapter__cover">
+    {videos}
     <div class="chapter__scrim" aria-hidden="true"></div>
     <div class="chapter__cover-inner">
       <span class="chapter__pill">Chapter {num}</span>
@@ -481,9 +494,9 @@ def page(chapters: list[dict]) -> str:
       <button class="mh__toggle" type="button" aria-label="Open chapter menu" aria-expanded="false" aria-controls="mh-drawer" data-mh-toggle>
         <span class="mh__toggle-icon" aria-hidden="true">
           <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-            <path class="mh__l1" d="M3 6h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
-            <path class="mh__l2" d="M3 11h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
-            <path class="mh__l3" d="M3 16h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+            <path class="mh__l1" d="M3 6h16" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"></path>
+            <path class="mh__l2" d="M3 11h16" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"></path>
+            <path class="mh__l3" d="M3 16h16" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"></path>
           </svg>
         </span>
       </button>
@@ -514,7 +527,7 @@ def page(chapters: list[dict]) -> str:
           <img src="assets/ltx-logo-black.svg" alt="LTX" width="91" height="39">
         </a>
         <div class="hero__copy">
-          <h1 class="hero__title h1-display">LoRA training guide</h1>
+          <h1 class="hero__title h1-display">LoRA <br class="hero__break">training guide</h1>
           <p class="hero__lead text-balanced">{html_lib.escape(hero_lead)}</p>
         </div>
       </div>
@@ -542,6 +555,7 @@ def page(chapters: list[dict]) -> str:
           </ul>
         </section>
         {"".join(chapter_html(ch) for ch in chapters)}
+        <p class="back-to-top"><a href="#top">Back to top</a></p>
       </main>
     </div>
 

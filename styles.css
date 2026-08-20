@@ -211,8 +211,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 }
 .mh__logo { display: inline-flex; padding: var(--space-2xs); }
 .mh__logo img { height: 22px; width: auto; }
-.mh__toggle { padding: var(--space-2xs); border-radius: var(--radius-sm); display: inline-flex; }
-.mh__toggle:hover { background: rgba(11, 11, 11, 0.06); }
+.mh__toggle { padding: var(--space-2xs); border-radius: var(--radius-sm); display: inline-flex; background: none; }
 .mh__l1, .mh__l2, .mh__l3 {
   transform-box: fill-box;
   transform-origin: center;
@@ -230,8 +229,11 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   border-bottom: 1px solid var(--color-border);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
   /* Inline padding matches the bar's own padding plus the logo link's, so the
-     list lines up with the mark above it instead of sitting further in. */
-  padding: calc(3.5rem + env(safe-area-inset-top, 0px)) calc(var(--space-xs) + var(--space-2xs)) var(--space-sm);
+     list lines up with the mark above it instead of sitting further in. The
+     block padding-top clears the bar and leaves the first row's own padding as
+     the air above "01"; the bottom is left to the last row's padding, so both
+     ends of the list are the same distance from their hairline. */
+  padding: calc(3.5rem + env(safe-area-inset-top, 0px)) calc(var(--space-xs) + var(--space-2xs)) 0;
   transform: translateY(-100%);
   transition: transform var(--transition-panel);
   max-height: 100dvh;
@@ -246,7 +248,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   grid-template-columns: var(--nav-num-col) minmax(0, 1fr);
   align-items: center;
   gap: var(--space-xs);
-  padding: var(--space-2xs) 0;
+  padding: var(--space-xs) 0;
   text-decoration: none;
   color: var(--color-ink);
   font-size: var(--fs-medium);
@@ -381,6 +383,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   color: var(--ltx-white);
   white-space: nowrap;
 }
+/* The title holds one line on desktop and splits after "LoRA" on a phone. */
+.hero__break { display: none; }
 .hero__lead {
   margin: 0;
   max-width: 48ch;
@@ -402,6 +406,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .hero__logo { display: none; }
   .hero__inner { justify-content: flex-end; gap: var(--space-md); }
   .hero__copy { gap: var(--space-xs); }
+  .hero__break { display: inline; }
 }
 
 /* Last resort: below this width the title cannot stay on one line without
@@ -557,15 +562,17 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
    Mobile "What's inside"
    ========================================================================== */
 
-/* Only ever shown below 900px, so these values are the mobile ones: the block
-   sits between two hairlines, which carry the separation the margins would
-   otherwise have to. */
+/* Only ever shown below 900px, so these values are the mobile ones. The block
+   opens on a hairline and closes on the last item's own border, so the line
+   under "06" sits the same distance below its title as the lines between the
+   items above it. */
 .whats-inside {
   display: none;
-  margin: var(--space-2xs) 0;
+  /* No bottom margin: the first chapter's own padding is the air below the
+     closing hairline, so it matches every other chapter divider. */
+  margin: var(--space-xs) 0 0;
   border-top: 1px solid var(--color-border);
-  border-bottom: 1px solid var(--color-border);
-  padding-block: var(--space-2xs);
+  padding-block: var(--space-xs) 0;
 }
 @media (max-width: 900px) { .whats-inside { display: block; } }
 .whats-inside__eyebrow {
@@ -573,11 +580,12 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--color-text-muted);
-  margin-bottom: var(--space-2xs);
+  margin-bottom: var(--space-xs);
 }
 .whats-inside__list { list-style: none; padding: 0; margin: 0; }
 .whats-inside__item + .whats-inside__item { border-top: 1px solid var(--color-border); }
-.whats-inside details { padding: var(--space-2xs) 0; }
+.whats-inside__item:last-child { border-bottom: 1px solid var(--color-border); }
+.whats-inside details { padding: var(--space-xs) 0; }
 .whats-inside summary {
   list-style: none;
   cursor: pointer;
@@ -588,14 +596,16 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   font-size: var(--fs-h6);
 }
 .whats-inside summary::-webkit-details-marker { display: none; }
+/* Tighter leading than the type scale's 1.2: at this size a two-line chapter
+   title reads as one block rather than two rows. */
 .whats-inside__num {
   font-size: var(--fs-h6);
-  line-height: var(--lh-medium);
+  line-height: 1.05;
   letter-spacing: 0.04em;
   color: var(--color-text-muted);
   font-variant-numeric: tabular-nums;
 }
-.whats-inside__title { font-size: var(--fs-h6); line-height: var(--lh-medium); letter-spacing: var(--ls-h6); }
+.whats-inside__title { font-size: var(--fs-h6); line-height: 1.05; letter-spacing: var(--ls-h6); }
 .whats-inside__plus { color: var(--color-text-muted); transition: transform var(--transition-panel); }
 /* With JS the icon follows .is-open, not [open]: the details stays open for the
    length of the collapse, so [open] would hold the cross until it finished. */
@@ -677,6 +687,9 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   object-fit: cover;
 }
 .chapter__video--flipped { transform: scaleX(-1); }
+/* Same pair as the hero: two elements rather than <source media>, since a
+   browser only evaluates those on the first load. */
+.chapter__video--mobile { display: none; }
 /* Same idea as .hero__scrim: enough shade under the copy to hold white text
    without washing the footage out. Both gradients clear well before the right
    edge and the top, so the empty side of the frame stays open. */
@@ -758,12 +771,12 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 /* Inline links: underline shown by default and retracting on hover, matching
    the .inline-draw-underline treatment on the ltx.io blog. */
-.rt a, .synopsis a, .ftr a {
+.rt a, .synopsis a, .ftr a, .back-to-top a {
   position: relative;
   color: inherit;
   text-decoration: none;
 }
-.rt a::after, .synopsis a::after, .ftr a::after {
+.rt a::after, .synopsis a::after, .ftr a::after, .back-to-top a::after {
   content: "";
   position: absolute;
   left: 0;
@@ -778,22 +791,23 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 }
 .rt a:is(:hover, :focus)::after,
 .synopsis a:is(:hover, :focus)::after,
-.ftr a:is(:hover, :focus)::after {
+.ftr a:is(:hover, :focus)::after,
+.back-to-top a:is(:hover, :focus)::after {
   transform: scaleX(0);
   transform-origin: right;
 }
 @media (prefers-reduced-motion: reduce) {
-  .rt a, .synopsis a, .ftr a { text-decoration: underline; text-underline-offset: 4px; }
-  .rt a::after, .synopsis a::after, .ftr a::after { content: none; }
+  .rt a, .synopsis a, .ftr a, .back-to-top a { text-decoration: underline; text-underline-offset: 4px; }
+  .rt a::after, .synopsis a::after, .ftr a::after, .back-to-top a::after { content: none; }
 }
 
 .rt ul, .rt ol { padding-left: 20px; margin-top: var(--space-sm); }
 .rt li { padding-block: 0.2rem; }
 .rt figure { margin: var(--space-lg) 0; }
-/* A caption ends the figure in running text, so the full --space-lg below it
-   reads as a blank line. Headings keep their air: their larger margin-top wins
-   the collapse. */
-.rt figure:has(figcaption) { margin-bottom: var(--space-md); }
+/* The figure owns the air on both of its sides. Without this the margin-top of
+   whatever follows collapses into the figure's own, and a figure followed by a
+   heading ends up with a much larger gap below it than above. */
+.rt figure + * { margin-top: 0; }
 .rt figure img { width: 100%; border-radius: var(--radius-md); }
 .rt figcaption {
   margin-top: var(--space-xs);
@@ -855,9 +869,13 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 }
 .code-card__copy:hover { color: var(--ltx-black); }
 .code-card__copy.is-copied { color: #2e7d32; }
+/* The horizontal scrollbar is drawn at the bottom of this box, over its own
+   padding, so the air that keeps it off the last line of code has to live here
+   rather than on the card. */
 .code-card__body {
   margin: 0;
   padding-right: 2rem;
+  padding-bottom: var(--space-xs);
   font-family: var(--font-mono);
   font-size: 0.9rem;
   line-height: var(--lh-large);
@@ -894,9 +912,11 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   border-collapse: collapse;
   border: 1px solid var(--table-border-color);
   table-layout: fixed;
-  font-size: var(--fs-regular);
-  line-height: 1.5;
-  letter-spacing: 0.02rem;
+  /* Same type as the copy around it: the embed's own size and tracking read as
+     a larger, wider face than the chapter text. */
+  font-size: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
 }
 .comparison-table th,
 .comparison-table td {
@@ -922,6 +942,9 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 [data-rt-embed-type] { min-width: 0; max-width: 100%; }
 .w-richtext-align-fullwidth { width: 100%; }
 
+/* Phones have no chapter rail, so the end of the last chapter is a dead end. */
+.back-to-top { display: none; }
+
 .ftr {
   border-top: 1px solid var(--color-border);
   padding-block: var(--space-md);
@@ -939,24 +962,36 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 @media (max-width: 900px) {
   /* The desktop rhythm puts several rems of air on both sides of every
      hairline, which reads as a gap in a 390px column. */
-  .chapter { padding-block: var(--space-sm); }
-  .chapter:first-of-type { padding-top: var(--space-xs); }
+  .chapter { padding-block: var(--space-lg); }
+  .chapter:first-of-type { padding-top: var(--space-lg); }
   .chapter__cover { margin-bottom: var(--space-md); }
+  .chapter__video--desktop { display: none; }
+  .chapter__video--mobile { display: block; }
 
   /* Figures fill the column on a phone, so they read as their own block
      without much help — the desktop air only pushes the copy off screen. */
   .rt figure { margin: var(--space-sm) 0; }
-  .rt figure:has(figcaption) { margin-bottom: var(--space-xs); }
 
-  .comparison-table { line-height: 1.3; }
   .comparison-table th,
   .comparison-table td { padding: 7px 9px; }
 
   /* The body scrolls horizontally, so its padding-right cannot keep the copy
-     button off the code — the first line clears it from above instead. */
-  .code-card { padding: var(--space-sm); margin-block: var(--space-md); }
-  .code-card__copy { top: var(--space-2xs); right: var(--space-2xs); }
-  .code-card__body { padding-top: var(--space-xs); padding-right: 0; }
+     button off the code; the card's top padding clears it from above instead.
+     The bottom matches the sides, and the air under the code comes from the
+     body's own padding-bottom, below which the scrollbar sits. */
+  .code-card { padding: var(--space-lg) var(--space-sm) var(--space-sm); margin-block: var(--space-md); }
+  .code-card__copy { top: var(--space-xs); right: var(--space-xs); }
+  .code-card__body { padding-right: 0; }
+
+  .back-to-top {
+    display: block;
+    padding-block: var(--space-sm);
+    font-size: var(--fs-small);
+    color: var(--color-text-muted);
+  }
+  /* The link is the whole line here, so it carries the copy colour, not the
+     muted tone the block would otherwise pass down. */
+  .back-to-top a { color: var(--color-ink); }
 
   .ftr {
     flex-direction: column;

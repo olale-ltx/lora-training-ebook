@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import html as html_lib
 import json
 import os
@@ -25,6 +26,19 @@ CHAPTERS = [
 FLIPPED_COVERS = {"ch6"}
 # Override the default assets/chapterN.mp4 path when a chapter has a later cut.
 COVER_VIDEOS = {"ch2": "assets/chapter2-upd.mp4"}
+
+
+def asset_version(name: str) -> str:
+    """Short content hash appended to local asset URLs.
+
+    GitHub Pages serves styles.css with a 10-minute max-age and no fingerprint,
+    so phones keep showing an old stylesheet long after a deploy. Keying the URL
+    to the file's contents makes a changed file a different URL.
+    """
+    path = ROOT / name
+    if not path.exists():
+        return "0"
+    return hashlib.sha256(path.read_bytes()).hexdigest()[:8]
 
 
 def load_token() -> str:
@@ -456,7 +470,7 @@ def page(chapters: list[dict]) -> str:
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
   <script src="https://use.typekit.net/emb1gsr.js"></script>
   <script>try{{Typekit.load()}}catch(e){{}}</script>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v={asset_version("styles.css")}">
 </head>
 <body>
   <header class="mh" data-mobile-header>
@@ -537,7 +551,7 @@ def page(chapters: list[dict]) -> str:
     </footer>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js"></script>
-  <script src="app.js"></script>
+  <script src="app.js?v={asset_version("app.js")}"></script>
 </body>
 </html>
 '''

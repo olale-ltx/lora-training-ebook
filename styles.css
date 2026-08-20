@@ -229,7 +229,9 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   background: var(--color-surface);
   border-bottom: 1px solid var(--color-border);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
-  padding: calc(3.5rem + env(safe-area-inset-top, 0px)) var(--space-md) var(--space-md);
+  /* Inline padding matches the bar's own padding plus the logo link's, so the
+     list lines up with the mark above it instead of sitting further in. */
+  padding: calc(3.5rem + env(safe-area-inset-top, 0px)) calc(var(--space-xs) + var(--space-2xs)) var(--space-sm);
   transform: translateY(-100%);
   transition: transform var(--transition-panel);
   max-height: 100dvh;
@@ -244,14 +246,29 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   grid-template-columns: var(--nav-num-col) minmax(0, 1fr);
   align-items: center;
   gap: var(--space-xs);
-  padding: var(--space-xs) 0;
+  padding: var(--space-2xs) 0;
   text-decoration: none;
   color: var(--color-ink);
-  font-size: var(--fs-tiny);
+  font-size: var(--fs-medium);
 }
-.mh__num { font-size: var(--fs-tiny); color: var(--color-text-muted); letter-spacing: 0.04em; }
+.mh__num {
+  font-size: var(--fs-medium);
+  line-height: var(--lh-medium);
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
 .mh__title { font-size: var(--fs-medium); line-height: var(--lh-medium); font-weight: 500; }
-.mh__expand { padding: var(--space-xs); color: var(--color-text-muted); border-radius: var(--radius-sm); }
+/* Stretched instead of padded, so the chevron keeps a full-row tap target
+   without making the row taller than the link's own padding. */
+.mh__expand {
+  display: inline-flex;
+  align-items: center;
+  align-self: stretch;
+  padding-inline: var(--space-xs);
+  color: var(--color-text-muted);
+  border-radius: var(--radius-sm);
+}
 .mh__chevron { transition: transform var(--transition-panel); }
 .mh__item.is-expanded .mh__chevron { transform: rotate(180deg); }
 .mh__sections {
@@ -261,19 +278,24 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   overflow: hidden;
   opacity: 0;
 }
-/* font-size matches .mh__num so --nav-num-col resolves to the number column
+/* Padding lives on the open state only, as in .rail__sections-list: min-height
+   on a 0fr grid item zeroes the content box but not the padding, so a closed
+   chapter would otherwise keep that space below its title.
+   font-size matches .mh__num so --nav-num-col resolves to the number column
    width and the sub-items start where the chapter title starts. */
 .mh__sections-list {
   min-height: 0;
-  font-size: var(--fs-tiny);
+  font-size: var(--fs-medium);
   list-style: none;
   margin: 0;
-  padding: 0 0 var(--space-xs) calc(var(--nav-num-col) + var(--space-xs));
+  padding: 0 0 0 calc(var(--nav-num-col) + var(--space-xs));
   display: flex;
   flex-direction: column;
   gap: var(--space-2xs);
+  transition: padding var(--transition-open);
 }
 .mh__item.is-expanded .mh__sections { grid-template-rows: 1fr; opacity: 1; }
+.mh__item.is-expanded .mh__sections-list { padding-block: var(--space-3xs) var(--space-2xs); }
 .mh__section {
   display: block;
   text-decoration: none;
@@ -320,6 +342,9 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   height: 100%;
   object-fit: cover;
 }
+/* Two elements rather than <source media>, which browsers only evaluate on the
+   first load and never re-check. setupCoverVideos pauses whichever is hidden. */
+.hero__video--mobile { display: none; }
 /* Keeps the white copy legible over the footage without flattening it. */
 .hero__scrim {
   position: absolute;
@@ -369,7 +394,11 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 /* The sticky mobile bar already carries the mark, so the hero drops its own. */
 @media (max-width: 900px) {
-  .hero { min-height: min(70vh, 32rem); margin-bottom: var(--space-md); }
+  /* The gap above the card matches the container's side padding, so the hero
+     is inset by the same amount on all four sides of the viewport. */
+  .hero { min-height: min(70vh, 32rem); margin-top: var(--container-pad); margin-bottom: 0; }
+  .hero__video--desktop { display: none; }
+  .hero__video--mobile { display: block; }
   .hero__logo { display: none; }
   .hero__inner { justify-content: flex-end; gap: var(--space-md); }
   .hero__copy { gap: var(--space-xs); }
@@ -521,7 +550,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 @media (max-width: 900px) {
   .shell { display: block; }
   .rail { display: none; }
-  .content { padding-block: var(--space-md) var(--space-xl); }
+  .content { padding-block: var(--space-2xs) var(--space-lg); }
 }
 
 /* ==========================================================================
@@ -530,10 +559,10 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 .whats-inside {
   display: none;
-  margin: var(--space-xl) 0;
+  margin: var(--space-sm) 0;
   border-top: 1px solid var(--color-border);
   border-bottom: 1px solid var(--color-border);
-  padding-block: var(--space-lg);
+  padding-block: var(--space-sm);
 }
 @media (max-width: 900px) { .whats-inside { display: block; } }
 .whats-inside__eyebrow {
@@ -541,34 +570,62 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--color-text-muted);
-  margin-bottom: var(--space-md);
+  margin-bottom: var(--space-xs);
 }
 .whats-inside__list { list-style: none; padding: 0; margin: 0; }
 .whats-inside__item + .whats-inside__item { border-top: 1px solid var(--color-border); }
-.whats-inside details { padding: var(--space-sm) 0; }
+.whats-inside details { padding: var(--space-xs) 0; }
 .whats-inside summary {
   list-style: none;
   cursor: pointer;
   display: grid;
   grid-template-columns: var(--nav-num-col) minmax(0, 1fr) auto;
   gap: var(--space-xs);
-  align-items: start;
-  font-size: var(--fs-tiny);
+  align-items: center;
+  font-size: var(--fs-h6);
 }
 .whats-inside summary::-webkit-details-marker { display: none; }
-.whats-inside__num { font-size: var(--fs-tiny); color: var(--color-text-muted); letter-spacing: 0.04em; }
+.whats-inside__num {
+  font-size: var(--fs-h6);
+  line-height: var(--lh-medium);
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
 .whats-inside__title { font-size: var(--fs-h6); line-height: var(--lh-medium); letter-spacing: var(--ls-h6); }
-.whats-inside__plus { color: var(--color-text-muted); transition: transform var(--transition-panel); margin-top: 0.25em; }
-details[open] .whats-inside__plus { transform: rotate(45deg); color: var(--color-ink); }
+.whats-inside__plus { color: var(--color-text-muted); transition: transform var(--transition-panel); }
+/* With JS the icon follows .is-open, not [open]: the details stays open for the
+   length of the collapse, so [open] would hold the cross until it finished. */
+.whats-inside details:not(.is-js)[open] .whats-inside__plus,
+.whats-inside details.is-open .whats-inside__plus { transform: rotate(45deg); color: var(--color-ink); }
+/* setupWhatsInside wraps the list in this panel so the expand can grow from
+   0fr to 1fr, the same mechanism (and easing) as .rail__sections on desktop.
+   Without JS the list is simply shown by [open], as a <details> normally is. */
+.whats-inside__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  overflow: hidden;
+  transition: grid-template-rows var(--transition-open);
+}
+.whats-inside details.is-open .whats-inside__panel { grid-template-rows: 1fr; }
+/* Padding grows with the row: on a 0fr grid item min-height zeroes the content
+   box but not the padding, which would otherwise make the list jump open. */
 .whats-inside__sections {
+  min-height: 0;
   list-style: none;
-  font-size: var(--fs-tiny);
-  padding: var(--space-sm) 0 0 calc(var(--nav-num-col) + var(--space-xs));
+  /* font-size matches .whats-inside__num so --nav-num-col resolves to the
+     number column width and the sub-items line up with the chapter title. */
+  font-size: var(--fs-h6);
+  padding: 0 0 0 calc(var(--nav-num-col) + var(--space-xs));
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--space-sm);
+  gap: var(--space-xs);
+  transition: padding var(--transition-open);
 }
+.whats-inside details.is-open .whats-inside__sections,
+/* Direct child only, so this is the un-wrapped (no-JS) list. */
+.whats-inside details[open] > .whats-inside__sections { padding-block: var(--space-xs) var(--space-3xs); }
 .whats-inside__sections a { text-decoration: none; color: var(--color-text-muted); font-size: var(--fs-regular); }
 .whats-inside__sections a:hover { color: var(--color-ink); }
 
@@ -582,6 +639,17 @@ details[open] .whats-inside__plus { transform: rotate(45deg); color: var(--color
   scroll-margin-top: var(--space-md);
 }
 .chapter:first-of-type { padding-top: var(--space-lg); border-top: 0; }
+/* The gap above a divider is measured from the last line of copy, which carries
+   half of its leading below the descenders, while the gap below it starts on the
+   hard edge of the next cover. Trimming that slack keeps both sides equal. */
+.chapter__body > :last-child { margin-bottom: calc((1em - 1lh) / 2); }
+@supports (text-box-trim: trim-end) {
+  .chapter__body > :last-child {
+    margin-bottom: 0;
+    text-box-trim: trim-end;
+    text-box-edge: auto text;
+  }
+}
 
 /* Chapter cover: footage fills the card, the pill and title sit on top of it.
    1080 × 520 is the frame from the design file. */
@@ -718,7 +786,11 @@ details[open] .whats-inside__plus { transform: rotate(45deg); color: var(--color
 
 .rt ul, .rt ol { padding-left: 20px; margin-top: var(--space-sm); }
 .rt li { padding-block: 0.2rem; }
-.rt figure { margin: var(--space-xl) 0; }
+.rt figure { margin: var(--space-lg) 0; }
+/* A caption ends the figure in running text, so the full --space-lg below it
+   reads as a blank line. Headings keep their air: their larger margin-top wins
+   the collapse. */
+.rt figure:has(figcaption) { margin-bottom: var(--space-md); }
 .rt figure img { width: 100%; border-radius: var(--radius-md); }
 .rt figcaption {
   margin-top: var(--space-xs);
@@ -855,4 +927,38 @@ details[open] .whats-inside__plus { transform: rotate(45deg); color: var(--color
   display: flex;
   justify-content: space-between;
   gap: var(--space-md);
+}
+
+/* ==========================================================================
+   Mobile refinements
+   ========================================================================== */
+
+@media (max-width: 900px) {
+  /* The desktop rhythm puts several rems of air on both sides of every
+     hairline, which reads as a gap in a 390px column. */
+  .chapter { padding-block: var(--space-lg); }
+  .chapter:first-of-type { padding-top: var(--space-sm); }
+  .chapter__cover { margin-bottom: var(--space-md); }
+
+  /* Figures fill the column on a phone, so they read as their own block
+     without much help — the desktop air only pushes the copy off screen. */
+  .rt figure { margin: var(--space-sm) 0; }
+  .rt figure:has(figcaption) { margin-bottom: var(--space-xs); }
+
+  .comparison-table { line-height: 1.3; }
+  .comparison-table th,
+  .comparison-table td { padding: 7px 9px; }
+
+  /* The body scrolls horizontally, so its padding-right cannot keep the copy
+     button off the code — the first line clears it from above instead. */
+  .code-card { padding: var(--space-sm); margin-block: var(--space-md); }
+  .code-card__copy { top: var(--space-2xs); right: var(--space-2xs); }
+  .code-card__body { padding-top: var(--space-xs); padding-right: 0; }
+
+  .ftr {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2xs);
+    padding-block: var(--space-sm);
+  }
 }

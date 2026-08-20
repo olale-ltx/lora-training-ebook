@@ -251,12 +251,77 @@ const setupRail = () => {
   }
 };
 
+// One chapter open at a time, and the sections grow in with the same easing as
+// the desktop rail.
+//
+// A <details> lays its content out only once it is open, so opening has to run
+// in two steps: flip open, read a style back to resolve the panel's 0fr, then
+// change to 1fr in that same task so the transition has a start value. Closing
+// runs the other way and only drops [open] once the collapse has played, which
+// is why the summary click is handled here instead of natively.
 const setupWhatsInside = () => {
+  // Kept in sync with --transition-open.
+  const OPEN_MS = 500;
+
   document.querySelectorAll(".whats-inside__list").forEach((list) => {
-    const details = list.querySelectorAll("details");
-    details.forEach((item) => {
+    const panels = [];
+
+    list.querySelectorAll("details").forEach((item) => {
+      const summary = item.querySelector("summary");
+      const sections = item.querySelector(".whats-inside__sections");
+      if (!summary || !sections) return;
+
+      const panel = document.createElement("div");
+      panel.className = "whats-inside__panel";
+      sections.replaceWith(panel);
+      panel.appendChild(sections);
+      item.classList.add("is-js");
+
+      // The state the reader last asked for. A click that lands mid-animation
+      // reverses the transition from wherever it is, rather than queueing.
+      let wanted = item.open;
+      let timer = 0;
+      // toggle fires a task late, by which time [open] can already disagree
+      // with a newer click, so our own flips are marked and ignored there.
+      let ours = false;
+
+      const flip = (open) => {
+        if (item.open === open) return;
+        ours = true;
+        item.open = open;
+      };
+
+      const set = (open) => {
+        wanted = open;
+        clearTimeout(timer);
+        if (open) {
+          panels.forEach((other) => {
+            if (other.item !== item) other.set(false);
+          });
+          flip(true);
+          void getComputedStyle(panel).gridTemplateRows;
+          item.classList.add("is-open");
+          return;
+        }
+        item.classList.remove("is-open");
+        timer = window.setTimeout(() => {
+          if (!wanted) flip(false);
+        }, OPEN_MS);
+      };
+
+      panels.push({ item, set });
+
+      summary.addEventListener("click", (event) => {
+        event.preventDefault();
+        set(!wanted);
+      });
+      // Anything that opens the details on its own, e.g. find-in-page.
       item.addEventListener("toggle", () => {
-        if (item.open) details.forEach((other) => { if (other !== item) other.open = false; });
+        if (ours) {
+          ours = false;
+          return;
+        }
+        if (item.open !== wanted) set(item.open);
       });
     });
   });
@@ -317,12 +382,16 @@ const setupCoverVideos = () => {
   const videos = Array.from(document.querySelectorAll("[data-cover-video]"));
   if (!videos.length) return;
   const stillPreferred = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const narrow = window.matchMedia("(max-width: 900px)");
   const observed = "IntersectionObserver" in window;
   const nearby = new Set(observed ? [] : videos);
+  // The hero ships a landscape and a portrait cut; CSS hides one of them, and
+  // only the rendered one is worth decoding.
+  const hidden = (video) => !video.getClientRects().length;
 
   const apply = (video) => {
-    if (stillPreferred.matches) {
-      video.removeAttribute("autoplay");
+    if (stillPreferred.matches || hidden(video)) {
+      if (stillPreferred.matches) video.removeAttribute("autoplay");
       video.pause();
       return;
     }
@@ -350,6 +419,7 @@ const setupCoverVideos = () => {
   }
   applyAll();
   stillPreferred.addEventListener("change", applyAll);
+  narrow.addEventListener("change", applyAll);
 };
 
 const setupExternalLinks = () => {

@@ -134,9 +134,13 @@
 
   <div class="page-stack container" id="top">
     <section class="hero" aria-label="LoRA training guide">
-      <video class="hero__video" poster="assets/hero-poster.jpg" autoplay muted loop playsinline
+      <video class="hero__video hero__video--desktop" poster="assets/hero-poster.jpg" autoplay muted loop playsinline
              preload="metadata" disablepictureinpicture aria-hidden="true" tabindex="-1" data-cover-video>
         <source src="assets/hero.mp4" type="video/mp4">
+      </video>
+      <video class="hero__video hero__video--mobile" poster="assets/hero-poster-mobile.jpg" autoplay muted loop playsinline
+             preload="none" disablepictureinpicture aria-hidden="true" tabindex="-1" data-cover-video>
+        <source src="assets/hero-mobile.mp4" type="video/mp4">
       </video>
       <div class="hero__scrim" aria-hidden="true"></div>
       <div class="hero__inner">
@@ -245,7 +249,7 @@
       <span class="whats-inside__num">01</span>
       <span class="whats-inside__title">When should you train a LoRA</span>
       <span class="whats-inside__plus" aria-hidden="true">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M8 2v12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8h12" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><path d="M8 2v12" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
       </span>
     </summary>
     <ul class="whats-inside__sections"><li><a href="#ch1-whats-in-this-guide">What’s in this guide</a></li><li><a href="#ch1-when-a-lora-is-the-right-tool">When a LoRA is the right tool</a></li><li><a href="#ch1-tl-dr">TL;DR</a></li></ul>
@@ -257,7 +261,7 @@
       <span class="whats-inside__num">02</span>
       <span class="whats-inside__title">How to decide what LoRA to train</span>
       <span class="whats-inside__plus" aria-hidden="true">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M8 2v12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8h12" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><path d="M8 2v12" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
       </span>
     </summary>
     <ul class="whats-inside__sections"><li><a href="#ch2-whats-the-target-and-what-isnt">What’s the target, and what isn’t</a></li><li><a href="#ch2-one-shot-or-many">One shot, or many?</a></li><li><a href="#ch2-choose-a-training-mode">Choose a training mode</a></li><li><a href="#ch2-does-it-need-audio">Does it need audio?</a></li><li><a href="#ch2-get-clear-before-clipping">Get clear before clipping</a></li></ul>
@@ -269,7 +273,7 @@
       <span class="whats-inside__num">03</span>
       <span class="whats-inside__title">How to build a LoRA dataset</span>
       <span class="whats-inside__plus" aria-hidden="true">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M8 2v12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8h12" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><path d="M8 2v12" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
       </span>
     </summary>
     <ul class="whats-inside__sections"><li><a href="#ch3-quality-over-quantity">Quality over quantity</a></li><li><a href="#ch3-cut-the-clips">Cut the clips</a></li><li><a href="#ch3-write-good-captions">Write good captions</a></li><li><a href="#ch3-what-a-good-caption-looks-like">What a good caption looks like</a></li><li><a href="#ch3-preprocess-into-latents">Preprocess into latents</a></li></ul>
@@ -281,7 +285,7 @@
       <span class="whats-inside__num">04</span>
       <span class="whats-inside__title">Setting up a LoRA training run</span>
       <span class="whats-inside__plus" aria-hidden="true">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M8 2v12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8h12" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><path d="M8 2v12" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
       </span>
     </summary>
     <ul class="whats-inside__sections"><li><a href="#ch4-why-one-resolution-isnt-enough">Why one resolution isn’t enough</a></li><li><a href="#ch4-pick-your-approach">Pick your approach</a></li><li><a href="#ch4-the-practical-default-a-mixed-run">The practical default: a mixed run</a></li><li><a href="#ch4-the-chain-maximum-fidelity-when-you-have-the-compute">The chain: maximum fidelity when you have the compute</a></li><li><a href="#ch4-running-the-chain">Running the chain</a></li><li><a href="#ch4-set-the-rank-before-you-start">Set the rank before you start</a></li></ul>
@@ -293,7 +297,7 @@
       <span class="whats-inside__num">05</span>
       <span class="whats-inside__title">How to run and monitor LoRA training</span>
       <span class="whats-inside__plus" aria-hidden="true">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M8 2v12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8h12" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><path d="M8 2v12" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
       </span>
     </summary>
     <ul class="whats-inside__sections"><li><a href="#ch5-a-couple-of-settings-worth-checking-first">A couple of settings worth checking first</a></li><li><a href="#ch5-keep-the-sequence-length-in-a-workable-range">Keep the sequence length in a workable range</a></li><li><a href="#ch5-launch">Launch</a></li><li><a href="#ch5-watch-the-run">Watch the run</a></li><li><a href="#ch5-when-to-stop">When to stop</a></li><li><a href="#ch5-ship-it-publish-your-lora">Ship it: publish your LoRA</a></li></ul>
@@ -305,7 +309,7 @@
       <span class="whats-inside__num">06</span>
       <span class="whats-inside__title">What are IC-LoRAs &amp; how to use them</span>
       <span class="whats-inside__plus" aria-hidden="true">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M8 2v12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8h12" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><path d="M8 2v12" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
       </span>
     </summary>
     <ul class="whats-inside__sections"><li><a href="#ch6-what-an-ic-lora-is">What an IC-LoRA is</a></li><li><a href="#ch6-when-you-need-one-and-which-signal">When you need one, and which signal</a></li><li><a href="#ch6-build-the-dataset">Build the dataset</a></li><li><a href="#ch6-settings">Settings</a></li><li><a href="#ch6-running-it">Running it</a></li><li><a href="#ch6-what-breaks">What breaks</a></li></ul>
@@ -322,7 +326,7 @@
     <div class="chapter__scrim" aria-hidden="true"></div>
     <div class="chapter__cover-inner">
       <span class="chapter__pill">Chapter 01</span>
-      <h1 class="chapter__title heading-style-h2 text-balanced">When should you train a LoRA</h1>
+      <h1 class="chapter__title heading-style-h2 text-balanced">When should you train a LoRA</h1>
     </div>
   </header>
   <div class="synopsis"><ul>
@@ -335,7 +339,7 @@
   <header class="chapter__cover">
     <video class="chapter__video" poster="https://cdn.prod.website-files.com/68c6ddbeb26cbd692adc0291/6a6b513b6c67c48c44d378b4_6a6b50be35561ec528af0269_LoRATrainingGuide-HeroOut-02.webp" autoplay muted loop playsinline
            preload="none" disablepictureinpicture aria-hidden="true" tabindex="-1" data-cover-video>
-      <source src="assets/chapter2.mp4" type="video/mp4">
+      <source src="assets/chapter2-upd.mp4" type="video/mp4">
     </video>
     <div class="chapter__scrim" aria-hidden="true"></div>
     <div class="chapter__cover-inner">
@@ -358,7 +362,7 @@
     <div class="chapter__scrim" aria-hidden="true"></div>
     <div class="chapter__cover-inner">
       <span class="chapter__pill">Chapter 03</span>
-      <h1 class="chapter__title heading-style-h2 text-balanced">How to build a LoRA dataset</h1>
+      <h1 class="chapter__title heading-style-h2 text-balanced">How to build a LoRA dataset</h1>
     </div>
   </header>
   <div class="synopsis"><ul>
@@ -376,7 +380,7 @@
     <div class="chapter__scrim" aria-hidden="true"></div>
     <div class="chapter__cover-inner">
       <span class="chapter__pill">Chapter 04</span>
-      <h1 class="chapter__title heading-style-h2 text-balanced">Setting up a LoRA training run</h1>
+      <h1 class="chapter__title heading-style-h2 text-balanced">Setting up a LoRA training run</h1>
     </div>
   </header>
   

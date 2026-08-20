@@ -557,12 +557,15 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
    Mobile "What's inside"
    ========================================================================== */
 
+/* Only ever shown below 900px, so these values are the mobile ones: the block
+   sits between two hairlines, which carry the separation the margins would
+   otherwise have to. */
 .whats-inside {
   display: none;
-  margin: var(--space-sm) 0;
+  margin: var(--space-2xs) 0;
   border-top: 1px solid var(--color-border);
   border-bottom: 1px solid var(--color-border);
-  padding-block: var(--space-sm);
+  padding-block: var(--space-2xs);
 }
 @media (max-width: 900px) { .whats-inside { display: block; } }
 .whats-inside__eyebrow {
@@ -570,11 +573,11 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--color-text-muted);
-  margin-bottom: var(--space-xs);
+  margin-bottom: var(--space-2xs);
 }
 .whats-inside__list { list-style: none; padding: 0; margin: 0; }
 .whats-inside__item + .whats-inside__item { border-top: 1px solid var(--color-border); }
-.whats-inside details { padding: var(--space-xs) 0; }
+.whats-inside details { padding: var(--space-2xs) 0; }
 .whats-inside summary {
   list-style: none;
   cursor: pointer;
@@ -936,8 +939,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 @media (max-width: 900px) {
   /* The desktop rhythm puts several rems of air on both sides of every
      hairline, which reads as a gap in a 390px column. */
-  .chapter { padding-block: var(--space-lg); }
-  .chapter:first-of-type { padding-top: var(--space-sm); }
+  .chapter { padding-block: var(--space-sm); }
+  .chapter:first-of-type { padding-top: var(--space-xs); }
   .chapter__cover { margin-bottom: var(--space-md); }
 
   /* Figures fill the column on a phone, so they read as their own block

@@ -1,0 +1,858 @@
+/* ==========================================================================
+   Tokens — LTX brand colors + ltx.io style-guide typography
+   Values mirror the Webflow variable collections "LTX brand colors" and
+   "Typography" (viewport-min 20rem, viewport-max 90rem).
+   ========================================================================== */
+
+:root {
+  --ltx-black: #0b0b0b;
+  --ltx-white: #f9f9f9;
+  --ltx-offwhite: #e7e8eb;
+  --ltx-white-blue-tint: #ebedf2;
+  --ltx-grey-dark: #1f1f24;
+  --ltx-grey-medium: #636367;
+  --ltx-grey-light: #999999;
+  --ltx-grey-blue-dark: #2e3445;
+  --ltx-grey-blue-light: #868ea5;
+  --ltx-grey-blue-medium: #bbc0cb;
+  --ltx-grey-blue-very-light: #d4dae8;
+  --ltx-gray: #eeeeee;
+
+  --color-bg: var(--ltx-offwhite);
+  --color-surface: var(--ltx-white);
+  --color-ink: var(--ltx-black);
+  --color-text: var(--ltx-black);
+  --color-text-secondary: var(--ltx-grey-dark);
+  --color-text-muted: var(--ltx-grey-medium);
+  --color-text-subtle: var(--ltx-grey-light);
+  --color-border: rgba(11, 11, 11, 0.1);
+  --color-soft-fill: rgba(134, 142, 165, 0.1);
+
+  --font-sans: "Aeonik", "Inter", Arial, system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* font-size scale */
+  --fs-h1: clamp(3rem, 2.5714rem + 2.1429vw, 4.5rem);
+  --fs-h2: clamp(2.25rem, 2.0929rem + 0.7857vw, 2.8rem);
+  --fs-h3: clamp(1.8rem, 1.6857rem + 0.5714vw, 2.2rem);
+  --fs-h4: clamp(1.5rem, 1.4286rem + 0.3571vw, 1.75rem);
+  --fs-h5: clamp(1.35rem, 1.3071rem + 0.2143vw, 1.5rem);
+  --fs-h6: clamp(1.125rem, 1.0893rem + 0.1786vw, 1.25rem);
+  --fs-xlarge: clamp(1.3625rem, 1.2946rem + 0.3393vw, 1.6rem);
+  --fs-large: clamp(1.2rem, 1.1714rem + 0.1429vw, 1.3rem);
+  --fs-medium: clamp(1.1rem, 1.0857rem + 0.0714vw, 1.15rem);
+  --fs-regular: clamp(1rem, 0.9857rem + 0.0714vw, 1.05rem);
+  --fs-small: clamp(0.9rem, 0.8857rem + 0.0714vw, 0.95rem);
+  --fs-tiny: 0.8rem;
+  /* Capped at 5.5rem so "LoRA training guide" stays on one line inside the
+     hero copy column on wide screens. */
+  --fs-display: clamp(3rem, 5vw, 5.5rem);
+
+  /* line-height scale */
+  --lh-tiny: 0.95;
+  --lh-small: 1;
+  --lh-regular: 1.1;
+  --lh-medium: 1.2;
+  --lh-large: 1.3;
+  --lh-xlarge: 1.4;
+
+  /* letter-spacing per style-guide text style */
+  --ls-display: -0.2rem;
+  --ls-h1: -0.12rem;
+  --ls-h2: -0.08rem;
+  --ls-h3: -0.04rem;
+  --ls-h4: -0.04rem;
+  --ls-h5: -0.04rem;
+  --ls-h6: -0.02rem;
+  --ls-xlarge: -0.02rem;
+  --ls-large: 0.015rem;
+  --ls-medium: 0.04rem;
+  --ls-regular: 0.01rem;
+  --ls-small: 0.01rem;
+
+  --space-3xs: 0.25rem;
+  --space-2xs: 0.5rem;
+  --space-xs: 0.75rem;
+  --space-sm: 1.25rem;
+  --space-md: 1.75rem;
+  --space-lg: 2.5rem;
+  --space-xl: 4rem;
+  --space-2xl: 6rem;
+
+  --container-max: 100rem;
+  --container-pad: clamp(1rem, 3.5vw, 3rem);
+  --rail-width: 30%;
+  --gap-rail-content: clamp(3rem, 7vw, 8rem);
+
+  --radius-sm: 3px;
+  --radius-md: 0.5rem;
+
+  /* Width of the "01" column in the nav lists, so sub-items can be indented
+     past it and line up with the chapter title even when the title wraps.
+     Uses ch/em, so it must be read on an element set to the number's own
+     font-size; 0.08em covers the 0.04em letter-spacing of the two digits. */
+  --nav-num-col: calc(2ch + 0.08em);
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --transition-fast: 0.14s var(--ease-out-soft);
+  --transition-base: 0.24s var(--ease-out-soft);
+  --transition-panel: 0.34s var(--ease-out-soft);
+  --transition-open: 0.5s var(--ease-out-soft);
+  --z-header: 20;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+/* Scrolling is smoothed by Lenis, and menu links jump instantly, so native
+   smooth scrolling stays off. */
+html { -webkit-text-size-adjust: 100%; scroll-behavior: auto; }
+
+/* Lenis (dist/lenis.css) */
+html.lenis,
+html.lenis body { height: auto; }
+.lenis:not(.lenis-autoToggle).lenis-stopped { overflow: clip; }
+.lenis [data-lenis-prevent],
+.lenis [data-lenis-prevent-wheel],
+.lenis [data-lenis-prevent-touch],
+.lenis [data-lenis-prevent-vertical],
+.lenis [data-lenis-prevent-horizontal] { overscroll-behavior: contain; }
+.lenis.lenis-smooth iframe { pointer-events: none; }
+.lenis.lenis-autoToggle {
+  transition-property: overflow;
+  transition-duration: 1ms;
+  transition-behavior: allow-discrete;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  font-family: var(--font-sans);
+  font-size: var(--fs-large);
+  line-height: var(--lh-xlarge);
+  letter-spacing: var(--ls-large);
+  color: var(--color-text);
+  background: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, h5, h6, p, figure, blockquote, dl, dd { margin: 0; }
+img, svg, video { display: block; max-width: 100%; height: auto; }
+a { color: inherit; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; padding: 0; }
+::selection { background: var(--ltx-black); color: var(--ltx-white); }
+:focus-visible { outline: 2px solid var(--ltx-black); outline-offset: 2px; }
+
+/* Style-guide heading styles */
+.heading-style-h1,
+.heading-style-h2,
+.heading-style-h3,
+.heading-style-h4,
+.heading-style-h5,
+.heading-style-h6,
+.h1-display {
+  font-family: var(--font-sans);
+  color: var(--color-ink);
+}
+.h1-display { font-size: var(--fs-display); line-height: var(--lh-small); letter-spacing: var(--ls-display); font-weight: 400; }
+.heading-style-h1 { font-size: var(--fs-h1); line-height: var(--lh-small); letter-spacing: var(--ls-h1); font-weight: 400; }
+.heading-style-h2 { font-size: var(--fs-h2); line-height: var(--lh-regular); letter-spacing: var(--ls-h2); font-weight: 400; }
+.heading-style-h3 { font-size: var(--fs-h3); line-height: var(--lh-regular); letter-spacing: var(--ls-h3); font-weight: 400; }
+.heading-style-h4 { font-size: var(--fs-h4); line-height: var(--lh-medium); letter-spacing: var(--ls-h4); font-weight: 500; }
+.heading-style-h5 { font-size: var(--fs-h5); line-height: var(--lh-medium); letter-spacing: var(--ls-h5); font-weight: 500; }
+.heading-style-h6 { font-size: var(--fs-h6); line-height: var(--lh-medium); letter-spacing: var(--ls-h6); font-weight: 500; }
+
+.text-size-xlarge { font-size: var(--fs-xlarge); line-height: var(--lh-large); letter-spacing: var(--ls-xlarge); }
+.text-size-large  { font-size: var(--fs-large);  line-height: var(--lh-large); letter-spacing: var(--ls-large); }
+.text-size-medium { font-size: var(--fs-medium); line-height: var(--lh-large); letter-spacing: var(--ls-medium); }
+.text-size-regular{ font-size: var(--fs-regular);line-height: var(--lh-large); letter-spacing: var(--ls-regular); }
+.text-size-small  { font-size: var(--fs-small);  line-height: var(--lh-medium); letter-spacing: var(--ls-small); }
+.text-style-muted { opacity: 0.6; }
+.is-grey-medium { color: var(--ltx-grey-medium); }
+
+/* ==========================================================================
+   Container
+   ========================================================================== */
+
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--container-pad);
+}
+
+/* ==========================================================================
+   Mobile header
+   ========================================================================== */
+
+.mh { display: none; }
+@media (max-width: 900px) { .mh { display: block; } }
+
+.mh__bar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: var(--z-header);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  padding: var(--space-2xs) var(--space-xs);
+  background: hsla(0, 0%, 97.65%, 0.55);
+  backdrop-filter: saturate(140%) blur(10px);
+  -webkit-backdrop-filter: saturate(140%) blur(10px);
+  border-bottom: 1px solid var(--color-border);
+}
+.mh__logo { display: inline-flex; padding: var(--space-2xs); }
+.mh__logo img { height: 22px; width: auto; }
+.mh__toggle { padding: var(--space-2xs); border-radius: var(--radius-sm); display: inline-flex; }
+.mh__toggle:hover { background: rgba(11, 11, 11, 0.06); }
+.mh__l1, .mh__l2, .mh__l3 {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform var(--transition-panel), opacity var(--transition-fast);
+}
+.mh.is-open .mh__l1 { transform: translateY(5px) rotate(45deg); }
+.mh.is-open .mh__l2 { opacity: 0; }
+.mh.is-open .mh__l3 { transform: translateY(-5px) rotate(-45deg); }
+
+.mh__drawer {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: calc(var(--z-header) - 1);
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  padding: calc(3.5rem + env(safe-area-inset-top, 0px)) var(--space-md) var(--space-md);
+  transform: translateY(-100%);
+  transition: transform var(--transition-panel);
+  max-height: 100dvh;
+  overflow-y: auto;
+}
+.mh.is-open .mh__drawer { transform: translateY(0); }
+.mh__list { list-style: none; padding: 0; margin: 0; }
+.mh__item + .mh__item { border-top: 1px solid var(--color-border); }
+.mh__row { display: grid; grid-template-columns: 1fr auto; align-items: center; }
+.mh__link {
+  display: grid;
+  grid-template-columns: var(--nav-num-col) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) 0;
+  text-decoration: none;
+  color: var(--color-ink);
+  font-size: var(--fs-tiny);
+}
+.mh__num { font-size: var(--fs-tiny); color: var(--color-text-muted); letter-spacing: 0.04em; }
+.mh__title { font-size: var(--fs-medium); line-height: var(--lh-medium); font-weight: 500; }
+.mh__expand { padding: var(--space-xs); color: var(--color-text-muted); border-radius: var(--radius-sm); }
+.mh__chevron { transition: transform var(--transition-panel); }
+.mh__item.is-expanded .mh__chevron { transform: rotate(180deg); }
+.mh__sections {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--transition-open), opacity var(--transition-base);
+  overflow: hidden;
+  opacity: 0;
+}
+/* font-size matches .mh__num so --nav-num-col resolves to the number column
+   width and the sub-items start where the chapter title starts. */
+.mh__sections-list {
+  min-height: 0;
+  font-size: var(--fs-tiny);
+  list-style: none;
+  margin: 0;
+  padding: 0 0 var(--space-xs) calc(var(--nav-num-col) + var(--space-xs));
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+}
+.mh__item.is-expanded .mh__sections { grid-template-rows: 1fr; opacity: 1; }
+.mh__section {
+  display: block;
+  text-decoration: none;
+  color: var(--color-text-muted);
+  font-size: var(--fs-regular);
+  line-height: var(--lh-large);
+  padding: 2px 0;
+}
+.mh__section:hover { color: var(--color-ink); }
+.mh__scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.18);
+  z-index: calc(var(--z-header) - 2);
+  opacity: 0;
+  visibility: hidden;
+  border: 0;
+  transition: opacity var(--transition-base), visibility 0s linear 0.24s;
+}
+.mh.is-open .mh__scrim { opacity: 1; visibility: visible; transition: opacity var(--transition-base), visibility 0s; }
+
+@media (max-width: 900px) { body { padding-top: var(--mh-height, 52px); } }
+
+/* ==========================================================================
+   Cover
+   ========================================================================== */
+
+.hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  margin-top: var(--space-md);
+  margin-bottom: var(--space-lg);
+  min-height: min(78vh, 44rem);
+  border-radius: var(--radius-md);
+  background-color: var(--ltx-grey-dark);
+}
+.hero__video {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* Keeps the white copy legible over the footage without flattening it. */
+.hero__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(to top, rgba(11, 11, 11, 0.68) 0%, rgba(11, 11, 11, 0.26) 40%, rgba(11, 11, 11, 0) 74%),
+    linear-gradient(100deg, rgba(11, 11, 11, 0.48) 0%, rgba(11, 11, 11, 0.1) 48%, rgba(11, 11, 11, 0) 72%);
+}
+.hero__inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-2xl);
+  width: 100%;
+  padding: clamp(1.5rem, 2.6vw, 3rem);
+  color: var(--ltx-white);
+}
+.hero__logo { display: inline-flex; align-self: flex-start; }
+.hero__logo img {
+  height: clamp(24px, 0.8rem + 1.1vw, 34px);
+  width: auto;
+  filter: brightness(0) invert(1);
+}
+.hero__copy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  max-width: 46rem;
+}
+.hero .hero__title {
+  margin: 0;
+  color: var(--ltx-white);
+  white-space: nowrap;
+}
+.hero__lead {
+  margin: 0;
+  max-width: 48ch;
+  color: #ffffff;
+  font-size: var(--fs-large);
+  line-height: var(--lh-large);
+  letter-spacing: var(--ls-large);
+  text-wrap: balance;
+}
+.text-balanced { text-wrap: balance; }
+
+/* The sticky mobile bar already carries the mark, so the hero drops its own. */
+@media (max-width: 900px) {
+  .hero { min-height: min(70vh, 32rem); margin-bottom: var(--space-md); }
+  .hero__logo { display: none; }
+  .hero__inner { justify-content: flex-end; gap: var(--space-md); }
+  .hero__copy { gap: var(--space-xs); }
+}
+
+/* Last resort: below this width the title cannot stay on one line without
+   shrinking past the display scale, so it is allowed to wrap. */
+@media (max-width: 440px) {
+  .hero .hero__title { white-space: normal; text-wrap: balance; }
+}
+
+/* ==========================================================================
+   Shell: 30% rail / 70% content
+   ========================================================================== */
+
+.shell {
+  display: grid;
+  grid-template-columns: minmax(0, var(--rail-width)) minmax(0, 1fr);
+  gap: var(--gap-rail-content);
+  align-items: start;
+}
+
+.rail {
+  position: sticky;
+  top: var(--space-md);
+  align-self: start;
+  max-height: calc(100dvh - var(--space-md) * 2);
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+}
+.rail__inner { display: flex; flex-direction: column; gap: var(--space-xl); }
+.rail__logo {
+  display: inline-flex;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-4px);
+  transition: opacity var(--transition-base), transform var(--transition-base), visibility 0s linear 0.24s;
+}
+.rail.is-past-hero .rail__logo {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition: opacity var(--transition-base), transform var(--transition-base), visibility 0s;
+}
+.rail__logo img { height: clamp(20px, 0.875rem + 0.6vw, 28px); width: auto; }
+.rail__list { list-style: none; padding: 0; margin: 0; }
+.rail__item { position: relative; }
+
+.rail__row {
+  position: relative;
+  padding-block: var(--space-sm);
+  border-top: 1px solid var(--color-border);
+  --rail-num-gap: var(--space-2xs);
+}
+.rail__item:last-child .rail__row { border-bottom: 1px solid var(--color-border); }
+
+/* Fixed number column instead of intrinsic sizing, so the sub-items below can
+   share the same indent and a wrapping title keeps its own left edge. */
+.rail__chapter {
+  display: grid;
+  grid-template-columns: var(--nav-num-col) minmax(0, 1fr);
+  gap: var(--rail-num-gap);
+  font-size: var(--fs-h6);
+  text-decoration: none;
+  color: var(--color-text-muted);
+  transition: color var(--transition-fast);
+}
+.rail__chapter:hover { color: var(--color-ink); }
+.rail__num {
+  font-size: var(--fs-h6);
+  line-height: var(--lh-medium);
+  letter-spacing: 0.04em;
+  font-weight: 400;
+  color: var(--color-text-subtle);
+  font-variant-numeric: tabular-nums;
+}
+.rail__chapter-title {
+  font-size: var(--fs-h6);
+  line-height: var(--lh-medium);
+  letter-spacing: var(--ls-h6);
+  text-wrap: pretty;
+}
+.rail__item.is-active .rail__chapter,
+.rail__item.is-active .rail__chapter-title {
+  color: var(--color-ink);
+  font-weight: 500;
+}
+
+.rail__sections {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  overflow: hidden;
+  transition: grid-template-rows var(--transition-open), opacity 0.22s linear;
+}
+/* Padding lives on the open state only: min-height on a 0fr grid item zeroes
+   the content box but not the padding, so a closed chapter would keep that
+   space and sit low between its hairlines.
+   font-size matches .rail__num so --nav-num-col resolves to the number column
+   width and the sub-items line up with the chapter title. */
+.rail__sections-list {
+  min-height: 0;
+  font-size: var(--fs-h6);
+  list-style: none;
+  padding: 0 0 0 calc(var(--nav-num-col) + var(--rail-num-gap));
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  transition: padding var(--transition-open);
+}
+.rail__item.is-active .rail__sections { grid-template-rows: 1fr; opacity: 1; }
+.rail__item.is-active .rail__sections-list { padding-block: var(--space-sm) var(--space-3xs); }
+.rail__section {
+  display: block;
+  text-decoration: none;
+  color: var(--color-text-muted);
+  font-size: var(--fs-regular);
+  line-height: var(--lh-large);
+  letter-spacing: var(--ls-regular);
+  transition: color var(--transition-fast);
+}
+.rail__section:hover { color: var(--color-ink); }
+.rail__section.is-active { color: var(--color-ink); font-weight: 500; }
+
+/* Read-progress underline: only the chapter you are reading shows a bar, and
+   it tracks scroll position through that chapter rather than animating on
+   click, so the row borders above/below stay thin and light. */
+.rail__progress {
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  height: 1px;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: left center;
+  background: var(--ltx-black);
+  pointer-events: none;
+  opacity: 0;
+}
+.rail__item.is-active .rail__progress {
+  opacity: 1;
+  transform: scaleX(var(--progress, 0));
+}
+
+.content { min-width: 0; padding-block: var(--space-xl) var(--space-2xl); }
+
+@media (max-width: 900px) {
+  .shell { display: block; }
+  .rail { display: none; }
+  .content { padding-block: var(--space-md) var(--space-xl); }
+}
+
+/* ==========================================================================
+   Mobile "What's inside"
+   ========================================================================== */
+
+.whats-inside {
+  display: none;
+  margin: var(--space-xl) 0;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  padding-block: var(--space-lg);
+}
+@media (max-width: 900px) { .whats-inside { display: block; } }
+.whats-inside__eyebrow {
+  font-size: var(--fs-tiny);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-md);
+}
+.whats-inside__list { list-style: none; padding: 0; margin: 0; }
+.whats-inside__item + .whats-inside__item { border-top: 1px solid var(--color-border); }
+.whats-inside details { padding: var(--space-sm) 0; }
+.whats-inside summary {
+  list-style: none;
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: var(--nav-num-col) minmax(0, 1fr) auto;
+  gap: var(--space-xs);
+  align-items: start;
+  font-size: var(--fs-tiny);
+}
+.whats-inside summary::-webkit-details-marker { display: none; }
+.whats-inside__num { font-size: var(--fs-tiny); color: var(--color-text-muted); letter-spacing: 0.04em; }
+.whats-inside__title { font-size: var(--fs-h6); line-height: var(--lh-medium); letter-spacing: var(--ls-h6); }
+.whats-inside__plus { color: var(--color-text-muted); transition: transform var(--transition-panel); margin-top: 0.25em; }
+details[open] .whats-inside__plus { transform: rotate(45deg); color: var(--color-ink); }
+.whats-inside__sections {
+  list-style: none;
+  font-size: var(--fs-tiny);
+  padding: var(--space-sm) 0 0 calc(var(--nav-num-col) + var(--space-xs));
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+.whats-inside__sections a { text-decoration: none; color: var(--color-text-muted); font-size: var(--fs-regular); }
+.whats-inside__sections a:hover { color: var(--color-ink); }
+
+/* ==========================================================================
+   Chapters
+   ========================================================================== */
+
+.chapter {
+  padding-block: var(--space-2xl);
+  border-top: 1px solid var(--color-border);
+  scroll-margin-top: var(--space-md);
+}
+.chapter:first-of-type { padding-top: var(--space-lg); border-top: 0; }
+
+/* Chapter cover: footage fills the card, the pill and title sit on top of it.
+   1080 × 520 is the frame from the design file. */
+.chapter__cover {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  width: 100%;
+  aspect-ratio: 1080 / 520;
+  margin-bottom: var(--space-lg);
+  border-radius: var(--radius-md);
+  background-color: var(--ltx-grey-dark);
+}
+.chapter__video {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.chapter__video--flipped { transform: scaleX(-1); }
+/* Same idea as .hero__scrim: enough shade under the copy to hold white text
+   without washing the footage out. Both gradients clear well before the right
+   edge and the top, so the empty side of the frame stays open. */
+.chapter__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(to top, rgba(11, 11, 11, 0.55) 0%, rgba(11, 11, 11, 0.18) 42%, rgba(11, 11, 11, 0) 72%),
+    linear-gradient(100deg, rgba(11, 11, 11, 0.32) 0%, rgba(11, 11, 11, 0) 45%);
+}
+.chapter__cover-inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-xs);
+  width: 100%;
+  padding: clamp(1.25rem, 2.2vw, 2.25rem);
+  color: var(--ltx-white);
+}
+.chapter__pill {
+  display: inline-flex;
+  padding: 0.5rem 1rem;
+  border: 1px solid rgba(249, 249, 249, 0.72);
+  border-radius: 999px;
+  background: rgba(11, 11, 11, 0.3);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  font-size: var(--fs-small);
+  letter-spacing: 0.04rem;
+  line-height: var(--lh-medium);
+  color: var(--ltx-white);
+}
+/* Narrow enough that every chapter title breaks onto two lines, as in the
+   design, and wide enough that the longest one never reaches a third. */
+.chapter__cover .chapter__title {
+  margin: 0;
+  max-width: 27rem;
+  color: var(--ltx-white);
+  text-wrap: balance;
+}
+/* Below ~37rem the design ratio leaves too little room for the copy, so the
+   card grows instead of squeezing the title. */
+@media (max-width: 720px) { .chapter__cover { min-height: 17rem; } }
+
+/* ==========================================================================
+   Rich text
+   ========================================================================== */
+
+/* One text size across every chapter: text-size-regular from the style guide. */
+.rt {
+  font-size: var(--fs-regular);
+  line-height: var(--lh-xlarge);
+  letter-spacing: var(--ls-regular);
+  color: var(--color-ink);
+  min-width: 0;
+}
+.rt > * + * { margin-top: var(--space-sm); }
+.rt h2 {
+  margin-top: var(--space-xl);
+  font-size: var(--fs-h2);
+  line-height: var(--lh-regular);
+  letter-spacing: var(--ls-h2);
+  font-weight: 400;
+  scroll-margin-top: 5rem;
+  text-wrap: balance;
+}
+.rt h3 {
+  margin-top: var(--space-lg);
+  font-size: var(--fs-h3);
+  line-height: var(--lh-regular);
+  letter-spacing: var(--ls-h3);
+  font-weight: 400;
+}
+.rt h2 strong, .rt h3 strong { font-weight: inherit; }
+.rt p { font-size: inherit; line-height: inherit; letter-spacing: inherit; }
+.rt strong { font-weight: 600; }
+
+/* Inline links: underline shown by default and retracting on hover, matching
+   the .inline-draw-underline treatment on the ltx.io blog. */
+.rt a, .synopsis a, .ftr a {
+  position: relative;
+  color: inherit;
+  text-decoration: none;
+}
+.rt a::after, .synopsis a::after, .ftr a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(1);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+  pointer-events: none;
+}
+.rt a:is(:hover, :focus)::after,
+.synopsis a:is(:hover, :focus)::after,
+.ftr a:is(:hover, :focus)::after {
+  transform: scaleX(0);
+  transform-origin: right;
+}
+@media (prefers-reduced-motion: reduce) {
+  .rt a, .synopsis a, .ftr a { text-decoration: underline; text-underline-offset: 4px; }
+  .rt a::after, .synopsis a::after, .ftr a::after { content: none; }
+}
+
+.rt ul, .rt ol { padding-left: 20px; margin-top: var(--space-sm); }
+.rt li { padding-block: 0.2rem; }
+.rt figure { margin: var(--space-xl) 0; }
+.rt figure img { width: 100%; border-radius: var(--radius-md); }
+.rt figcaption {
+  margin-top: var(--space-xs);
+  font-size: var(--fs-small);
+  line-height: var(--lh-medium);
+  color: var(--ltx-grey-medium);
+}
+.rt blockquote {
+  border-left: 2px solid var(--ltx-grey-light);
+  padding: 0.25rem 0 0.25rem 1.25rem;
+  font-size: var(--fs-xlarge);
+  line-height: var(--lh-xlarge);
+  letter-spacing: -0.01rem;
+}
+.rt code {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background: var(--color-soft-fill);
+  padding: 0.12em 0.35em;
+  border-radius: var(--radius-sm);
+}
+
+.synopsis {
+  font-size: var(--fs-regular);
+  line-height: var(--lh-xlarge);
+  letter-spacing: var(--ls-regular);
+  color: var(--color-ink);
+  margin-bottom: var(--space-lg);
+}
+.synopsis p { margin: 0; }
+.synopsis > * + * { margin-top: var(--space-sm); }
+.synopsis > :first-child { margin-top: 0; }
+.rt > :first-child { margin-top: 0; }
+.synopsis ul, .synopsis ol { padding-left: 20px; }
+.synopsis li { padding-block: 0.2rem; }
+
+/* ==========================================================================
+   Code card — mirrors the BibTeX block on ltx.io publication pages
+   ========================================================================== */
+
+.code-card {
+  position: relative;
+  background-color: var(--color-soft-fill);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  margin-block: var(--space-lg);
+}
+.code-card__copy {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ltx-grey-medium);
+  border-radius: var(--radius-sm);
+  padding: 2px;
+  transition: color var(--transition-fast);
+}
+.code-card__copy:hover { color: var(--ltx-black); }
+.code-card__copy.is-copied { color: #2e7d32; }
+.code-card__body {
+  margin: 0;
+  padding-right: 2rem;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  line-height: var(--lh-large);
+  letter-spacing: 0;
+  color: var(--ltx-grey-medium);
+  white-space: pre;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.code-card__body code {
+  font-family: inherit;
+  font-size: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+}
+
+/* ==========================================================================
+   Tables (from the ltx.io blog embed styles)
+   ========================================================================== */
+
+.comparison-table-wrapper {
+  margin: var(--space-lg) 0;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.comparison-table {
+  --table-border-color: rgba(11, 11, 11, 0.12);
+  --table-soft-bg: rgba(11, 11, 11, 0.03);
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--table-border-color);
+  table-layout: fixed;
+  font-size: var(--fs-regular);
+  line-height: 1.5;
+  letter-spacing: 0.02rem;
+}
+.comparison-table th,
+.comparison-table td {
+  border: 1px solid var(--table-border-color);
+  text-align: left;
+  vertical-align: top;
+  color: var(--color-ink);
+  padding: 12px 14px;
+  overflow-wrap: anywhere;
+}
+.comparison-table thead th { font-weight: 700; background: var(--table-soft-bg); }
+.comparison-table-simple th:first-child,
+.comparison-table-simple td:first-child { width: 15%; }
+.comparison-table-grid th:first-child,
+.comparison-table-grid td:first-child { width: 30%; }
+.comparison-table-grid .section-row td { font-weight: 700; background: var(--table-soft-bg); }
+@media (max-width: 768px) {
+  .comparison-table { min-width: 480px; }
+  .comparison-table th:first-child,
+  .comparison-table td:first-child { width: auto; }
+}
+
+[data-rt-embed-type] { min-width: 0; max-width: 100%; }
+.w-richtext-align-fullwidth { width: 100%; }
+
+.ftr {
+  border-top: 1px solid var(--color-border);
+  padding-block: var(--space-md);
+  color: var(--color-text-muted);
+  font-size: var(--fs-small);
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-md);
+}

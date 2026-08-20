@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LoRA Training Guide | LTX</title>
+  <meta name="description" content="Prompt LTX well and it will give you almost anything you can describe. Feed it a reference frame and it will animate what’s in it.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="LoRA Training Guide | LTX">
+  <meta property="og:description" content="Prompt LTX well and it will give you almost anything you can describe. Feed it a reference frame and it will animate what’s in it.">
+  <meta property="og:image" content="assets/lora-training-og.webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="LoRA Training Guide | LTX">
+  <meta name="twitter:description" content="Prompt LTX well and it will give you almost anything you can describe. Feed it a reference frame and it will animate what’s in it.">
+  <meta name="twitter:image" content="assets/lora-training-og.webp">
+  <meta name="theme-color" content="#e7e8eb">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+  <script src="https://use.typekit.net/emb1gsr.js"></script>
+  <script>try{Typekit.load()}catch(e){}</script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="mh" data-mobile-header>
+    <div class="mh__bar">
+      <a class="mh__logo" href="#top" aria-label="LTX">
+        <img src="assets/ltx-logo-black.svg" alt="LTX" width="91" height="39">
+      </a>
+      <button class="mh__toggle" type="button" aria-label="Open chapter menu" aria-expanded="false" aria-controls="mh-drawer" data-mh-toggle>
+        <span class="mh__toggle-icon" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <path class="mh__l1" d="M3 6h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+            <path class="mh__l2" d="M3 11h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+            <path class="mh__l3" d="M3 16h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+          </svg>
+        </span>
+      </button>
+    </div>
+    <div id="mh-drawer" class="mh__drawer" role="dialog" aria-label="Chapter menu" aria-hidden="true" data-mh-drawer>
+      <nav>
+        <ol class="mh__list">
+          <li class="mh__item" data-mh-item="ch1">
+  <div class="mh__row">
+    <a class="mh__link" href="#ch1" data-mh-link>
+      <span class="mh__num">01</span>
+      <span class="mh__title">When should you train a LoRA</span>
+    </a>
+    <button class="mh__expand" type="button" aria-label="Show sub-sections of When should you train a LoRA" aria-expanded="false" aria-controls="mh-sub-ch1" data-mh-expand="ch1">
+      <svg class="mh__chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 5l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+    </button>
+  </div>
+  <div id="mh-sub-ch1" class="mh__sections" aria-hidden="true" data-mh-sections="ch1">
+    <ul class="mh__sections-list"><li><a class="mh__section" href="#ch1-whats-in-this-guide" data-mh-link>What’s in this guide</a></li><li><a class="mh__section" href="#ch1-when-a-lora-is-the-right-tool" data-mh-link>When a LoRA is the right tool</a></li><li><a class="mh__section" href="#ch1-tl-dr" data-mh-link>TL;DR</a></li></ul>
+  </div>
+</li>
+<li class="mh__item" data-mh-item="ch2">
+  <div class="mh__row">
+    <a class="mh__link" href="#ch2" data-mh-link>
+      <span class="mh__num">02</span>
+      <span class="mh__title">How to decide what LoRA to train</span>
+    </a>
+    <button class="mh__expand" type="button" aria-label="Show sub-sections of How to decide what LoRA to train" aria-expanded="false" aria-controls="mh-sub-ch2" data-mh-expand="ch2">
+      <svg class="mh__chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 5l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+    </button>
+  </div>
+  <div id="mh-sub-ch2" class="mh__sections" aria-hidden="true" data-mh-sections="ch2">
+    <ul class="mh__sections-list"><li><a class="mh__section" href="#ch2-whats-the-target-and-what-isnt" data-mh-link>What’s the target, and what isn’t</a></li><li><a class="mh__section" href="#ch2-one-shot-or-many" data-mh-link>One shot, or many?</a></li><li><a class="mh__section" href="#ch2-choose-a-training-mode" data-mh-link>Choose a training mode</a></li><li><a class="mh__section" href="#ch2-does-it-need-audio" data-mh-link>Does it need audio?</a></li><li><a class="mh__section" href="#ch2-get-clear-before-clipping" data-mh-link>Get clear before clipping</a></li></ul>
+  </div>
+</li>
+<li class="mh__item" data-mh-item="ch3">
+  <div class="mh__row">
+    <a class="mh__link" href="#ch3" data-mh-link>
+      <span class="mh__num">03</span>
+      <span class="mh__title">How to build a LoRA dataset</span>
+    </a>
+    <button class="mh__expand" type="button" aria-label="Show sub-sections of How to build a LoRA dataset" aria-expanded="false" aria-controls="mh-sub-ch3" data-mh-expand="ch3">
+      <svg class="mh__chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 5l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+    </button>
+  </div>
+  <div id="mh-sub-ch3" class="mh__sections" aria-hidden="true" data-mh-sections="ch3">
+    <ul class="mh__sections-list"><li><a class="mh__section" href="#ch3-quality-over-quantity" data-mh-link>Quality over quantity</a></li><li><a class="mh__section" href="#ch3-cut-the-clips" data-mh-link>Cut the clips</a></li><li><a class="mh__section" href="#ch3-write-good-captions" data-mh-link>Write good captions</a></li><li><a class="mh__section" href="#ch3-what-a-good-caption-looks-like" data-mh-link>What a good caption looks like</a></li><li><a class="mh__section" href="#ch3-preprocess-into-latents" data-mh-link>Preprocess into latents</a></li></ul>
+  </div>
+</li>
+<li class="mh__item" data-mh-item="ch4">
+  <div class="mh__row">
+    <a class="mh__link" href="#ch4" data-mh-link>
+      <span class="mh__num">04</span>
+      <span class="mh__title">Setting up a LoRA training run</span>
+    </a>
+    <button class="mh__expand" type="button" aria-label="Show sub-sections of Setting up a LoRA training run" aria-expanded="false" aria-controls="mh-sub-ch4" data-mh-expand="ch4">
+      <svg class="mh__chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 5l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+    </button>
+  </div>
+  <div id="mh-sub-ch4" class="mh__sections" aria-hidden="true" data-mh-sections="ch4">
+    <ul class="mh__sections-list"><li><a class="mh__section" href="#ch4-why-one-resolution-isnt-enough" data-mh-link>Why one resolution isn’t enough</a></li><li><a class="mh__section" href="#ch4-pick-your-approach" data-mh-link>Pick your approach</a></li><li><a class="mh__section" href="#ch4-the-practical-default-a-mixed-run" data-mh-link>The practical default: a mixed run</a></li><li><a class="mh__section" href="#ch4-the-chain-maximum-fidelity-when-you-have-the-compute" data-mh-link>The chain: maximum fidelity when you have the compute</a></li><li><a class="mh__section" href="#ch4-running-the-chain" data-mh-link>Running the chain</a></li><li><a class="mh__section" href="#ch4-set-the-rank-before-you-start" data-mh-link>Set the rank before you start</a></li></ul>
+  </div>
+</li>
+<li class="mh__item" data-mh-item="ch5">
+  <div class="mh__row">
+    <a class="mh__link" href="#ch5" data-mh-link>
+      <span class="mh__num">05</span>
+      <span class="mh__title">How to run and monitor LoRA training</span>
+    </a>
+    <button class="mh__expand" type="button" aria-label="Show sub-sections of How to run and monitor LoRA training" aria-expanded="false" aria-controls="mh-sub-ch5" data-mh-expand="ch5">
+      <svg class="mh__chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 5l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+    </button>
+  </div>
+  <div id="mh-sub-ch5" class="mh__sections" aria-hidden="true" data-mh-sections="ch5">
+    <ul class="mh__sections-list"><li><a class="mh__section" href="#ch5-a-couple-of-settings-worth-checking-first" data-mh-link>A couple of settings worth checking first</a></li><li><a class="mh__section" href="#ch5-keep-the-sequence-length-in-a-workable-range" data-mh-link>Keep the sequence length in a workable range</a></li><li><a class="mh__section" href="#ch5-launch" data-mh-link>Launch</a></li><li><a class="mh__section" href="#ch5-watch-the-run" data-mh-link>Watch the run</a></li><li><a class="mh__section" href="#ch5-when-to-stop" data-mh-link>When to stop</a></li><li><a class="mh__section" href="#ch5-ship-it-publish-your-lora" data-mh-link>Ship it: publish your LoRA</a></li></ul>
+  </div>
+</li>
+<li class="mh__item" data-mh-item="ch6">
+  <div class="mh__row">
+    <a class="mh__link" href="#ch6" data-mh-link>
+      <span class="mh__num">06</span>
+      <span class="mh__title">What are IC-LoRAs &amp; how to use them</span>
+    </a>
+    <button class="mh__expand" type="button" aria-label="Show sub-sections of What are IC-LoRAs &amp; how to use them" aria-expanded="false" aria-controls="mh-sub-ch6" data-mh-expand="ch6">
+      <svg class="mh__chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 5l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+    </button>
+  </div>
+  <div id="mh-sub-ch6" class="mh__sections" aria-hidden="true" data-mh-sections="ch6">
+    <ul class="mh__sections-list"><li><a class="mh__section" href="#ch6-what-an-ic-lora-is" data-mh-link>What an IC-LoRA is</a></li><li><a class="mh__section" href="#ch6-when-you-need-one-and-which-signal" data-mh-link>When you need one, and which signal</a></li><li><a class="mh__section" href="#ch6-build-the-dataset" data-mh-link>Build the dataset</a></li><li><a class="mh__section" href="#ch6-settings" data-mh-link>Settings</a></li><li><a class="mh__section" href="#ch6-running-it" data-mh-link>Running it</a></li><li><a class="mh__section" href="#ch6-what-breaks" data-mh-link>What breaks</a></li></ul>
+  </div>
+</li>
+        </ol>
+      </nav>
+    </div>
+    <button class="mh__scrim" type="button" aria-label="Close chapter menu" tabindex="-1" data-mh-scrim></button>
+  </header>
+
+  <div class="page-stack container" id="top">
+    <section class="hero" aria-label="LoRA training guide">
+      <video class="hero__video" poster="assets/hero-poster.jpg" autoplay muted loop playsinline
+             preload="metadata" disablepictureinpicture aria-hidden="true" tabindex="-1" data-cover-video>
+        <source src="assets/hero.mp4" type="video/mp4">
+      </video>
+      <div class="hero__scrim" aria-hidden="true"></div>
+      <div class="hero__inner">
+        <a class="hero__logo" href="#top" aria-label="LTX">
+          <img src="assets/ltx-logo-black.svg" alt="LTX" width="91" height="39">
+        </a>
+        <div class="hero__copy">
+          <h1 class="hero__title h1-display">LoRA training guide</h1>
+          <p class="hero__lead text-balanced">When to train, what to learn, how to ship a LoRA on LTX. Prompt LTX well and it will give you almost anything you can describe. Feed it a reference frame and it will animate what’s in it.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="shell">
+      <aside class="rail" aria-label="Table of contents">
+        <div class="rail__inner">
+          <a class="rail__logo" href="#top" aria-label="LTX">
+            <img src="assets/ltx-logo-black.svg" alt="LTX" width="91" height="39">
+          </a>
+          <nav class="rail__nav">
+            <ol class="rail__list">
+              <li class="rail__item" data-chapter="ch1">
+  <div class="rail__row">
+    <a class="rail__chapter" href="#ch1" data-chapter-link="ch1">
+      <span class="rail__num">01</span>
+      <span class="rail__chapter-title">When should you train a LoRA</span>
+    </a>
+    <div class="rail__sections">
+      <ul class="rail__sections-list" aria-label="When should you train a LoRA sections"><li><a class="rail__section" href="#ch1-whats-in-this-guide" data-section-link="ch1-whats-in-this-guide">What’s in this guide</a></li><li><a class="rail__section" href="#ch1-when-a-lora-is-the-right-tool" data-section-link="ch1-when-a-lora-is-the-right-tool">When a LoRA is the right tool</a></li><li><a class="rail__section" href="#ch1-tl-dr" data-section-link="ch1-tl-dr">TL;DR</a></li></ul>
+    </div>
+    <span class="rail__progress" aria-hidden="true"></span>
+  </div>
+</li>
+<li class="rail__item" data-chapter="ch2">
+  <div class="rail__row">
+    <a class="rail__chapter" href="#ch2" data-chapter-link="ch2">
+      <span class="rail__num">02</span>
+      <span class="rail__chapter-title">How to decide what LoRA to train</span>
+    </a>
+    <div class="rail__sections">
+      <ul class="rail__sections-list" aria-label="How to decide what LoRA to train sections"><li><a class="rail__section" href="#ch2-whats-the-target-and-what-isnt" data-section-link="ch2-whats-the-target-and-what-isnt">What’s the target, and what isn’t</a></li><li><a class="rail__section" href="#ch2-one-shot-or-many" data-section-link="ch2-one-shot-or-many">One shot, or many?</a></li><li><a class="rail__section" href="#ch2-choose-a-training-mode" data-section-link="ch2-choose-a-training-mode">Choose a training mode</a></li><li><a class="rail__section" href="#ch2-does-it-need-audio" data-section-link="ch2-does-it-need-audio">Does it need audio?</a></li><li><a class="rail__section" href="#ch2-get-clear-before-clipping" data-section-link="ch2-get-clear-before-clipping">Get clear before clipping</a></li></ul>
+    </div>
+    <span class="rail__progress" aria-hidden="true"></span>
+  </div>
+</li>
+<li class="rail__item" data-chapter="ch3">
+  <div class="rail__row">
+    <a class="rail__chapter" href="#ch3" data-chapter-link="ch3">
+      <span class="rail__num">03</span>
+      <span class="rail__chapter-title">How to build a LoRA dataset</span>
+    </a>
+    <div class="rail__sections">
+      <ul class="rail__sections-list" aria-label="How to build a LoRA dataset sections"><li><a class="rail__section" href="#ch3-quality-over-quantity" data-section-link="ch3-quality-over-quantity">Quality over quantity</a></li><li><a class="rail__section" href="#ch3-cut-the-clips" data-section-link="ch3-cut-the-clips">Cut the clips</a></li><li><a class="rail__section" href="#ch3-write-good-captions" data-section-link="ch3-write-good-captions">Write good captions</a></li><li><a class="rail__section" href="#ch3-what-a-good-caption-looks-like" data-section-link="ch3-what-a-good-caption-looks-like">What a good caption looks like</a></li><li><a class="rail__section" href="#ch3-preprocess-into-latents" data-section-link="ch3-preprocess-into-latents">Preprocess into latents</a></li></ul>
+    </div>
+    <span class="rail__progress" aria-hidden="true"></span>
+  </div>
+</li>
+<li class="rail__item" data-chapter="ch4">
+  <div class="rail__row">
+    <a class="rail__chapter" href="#ch4" data-chapter-link="ch4">
+      <span class="rail__num">04</span>
+      <span class="rail__chapter-title">Setting up a LoRA training run</span>
+    </a>
+    <div class="rail__sections">
+      <ul class="rail__sections-list" aria-label="Setting up a LoRA training run sections"><li><a class="rail__section" href="#ch4-why-one-resolution-isnt-enough" data-section-link="ch4-why-one-resolution-isnt-enough">Why one resolution isn’t enough</a></li><li><a class="rail__section" href="#ch4-pick-your-approach" data-section-link="ch4-pick-your-approach">Pick your approach</a></li><li><a class="rail__section" href="#ch4-the-practical-default-a-mixed-run" data-section-link="ch4-the-practical-default-a-mixed-run">The practical default: a mixed run</a></li><li><a class="rail__section" href="#ch4-the-chain-maximum-fidelity-when-you-have-the-compute" data-section-link="ch4-the-chain-maximum-fidelity-when-you-have-the-compute">The chain: maximum fidelity when you have the compute</a></li><li><a class="rail__section" href="#ch4-running-the-chain" data-section-link="ch4-running-the-chain">Running the chain</a></li><li><a class="rail__section" href="#ch4-set-the-rank-before-you-start" data-section-link="ch4-set-the-rank-before-you-start">Set the rank before you start</a></li></ul>
+    </div>
+    <span class="rail__progress" aria-hidden="true"></span>
+  </div>
+</li>
+<li class="rail__item" data-chapter="ch5">
+  <div class="rail__row">
+    <a class="rail__chapter" href="#ch5" data-chapter-link="ch5">
+      <span class="rail__num">05</span>
+      <span class="rail__chapter-title">How to run and monitor LoRA training</span>
+    </a>
+    <div class="rail__sections">
+      <ul class="rail__sections-list" aria-label="How to run and monitor LoRA training sections"><li><a class="rail__section" href="#ch5-a-couple-of-settings-worth-checking-first" data-section-link="ch5-a-couple-of-settings-worth-checking-first">A couple of settings worth checking first</a></li><li><a class="rail__section" href="#ch5-keep-the-sequence-length-in-a-workable-range" data-section-link="ch5-keep-the-sequence-length-in-a-workable-range">Keep the sequence length in a workable range</a></li><li><a class="rail__section" href="#ch5-launch" data-section-link="ch5-launch">Launch</a></li><li><a class="rail__section" href="#ch5-watch-the-run" data-section-link="ch5-watch-the-run">Watch the run</a></li><li><a class="rail__section" href="#ch5-when-to-stop" data-section-link="ch5-when-to-stop">When to stop</a></li><li><a class="rail__section" href="#ch5-ship-it-publish-your-lora" data-section-link="ch5-ship-it-publish-your-lora">Ship it: publish your LoRA</a></li></ul>
+    </div>
+    <span class="rail__progress" aria-hidden="true"></span>
+  </div>
+</li>
+<li class="rail__item" data-chapter="ch6">
+  <div class="rail__row">
+    <a class="rail__chapter" href="#ch6" data-chapter-link="ch6">
+      <span class="rail__num">06</span>
+      <span class="rail__chapter-title">What are IC-LoRAs &amp; how to use them</span>
+    </a>
+    <div class="rail__sections">
+      <ul class="rail__sections-list" aria-label="What are IC-LoRAs &amp; how to use them sections"><li><a class="rail__section" href="#ch6-what-an-ic-lora-is" data-section-link="ch6-what-an-ic-lora-is">What an IC-LoRA is</a></li><li><a class="rail__section" href="#ch6-when-you-need-one-and-which-signal" data-section-link="ch6-when-you-need-one-and-which-signal">When you need one, and which signal</a></li><li><a class="rail__section" href="#ch6-build-the-dataset" data-section-link="ch6-build-the-dataset">Build the dataset</a></li><li><a class="rail__section" href="#ch6-settings" data-section-link="ch6-settings">Settings</a></li><li><a class="rail__section" href="#ch6-running-it" data-section-link="ch6-running-it">Running it</a></li><li><a class="rail__section" href="#ch6-what-breaks" data-section-link="ch6-what-breaks">What breaks</a></li></ul>
+    </div>
+    <span class="rail__progress" aria-hidden="true"></span>
+  </div>
+</li>
+            </ol>
+          </nav>
+        </div>
+      </aside>
+
+      <main class="content" id="content">
+        <section class="whats-inside" aria-label="What's inside">
+          <p class="whats-inside__eyebrow">What's inside</p>
+          <ul class="whats-inside__list">
+            <li class="whats-inside__item">
+  <details>
+    <summary>
+      <span class="whats-inside__num">01</span>
+      <span class="whats-inside__title">When should you train a LoRA</span>
+      <span class="whats-inside__plus" aria-hidden="true">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M8 2v12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </span>
+    </summary>
+    <ul class="whats-inside__sections"><li><a href="#ch1-whats-in-this-guide">What’s in this guide</a></li><li><a href="#ch1-when-a-lora-is-the-right-tool">When a LoRA is the right tool</a></li><li><a href="#ch1-tl-dr">TL;DR</a></li></ul>
+  </details>
+</li>
+<li class="whats-inside__item">
+  <details>
+    <summary>
+      <span class="whats-inside__num">02</span>
+      <span class="whats-inside__title">How to decide what LoRA to train</span>
+      <span class="whats-inside__plus" aria-hidden="true">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M8 2v12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </span>
+    </summary>
+    <ul class="whats-inside__sections"><li><a href="#ch2-whats-the-target-and-what-isnt">What’s the target, and what isn’t</a></li><li><a href="#ch2-one-shot-or-many">One shot, or many?</a></li><li><a href="#ch2-choose-a-training-mode">Choose a training mode</a></li><li><a href="#ch2-does-it-need-audio">Does it need audio?</a></li><li><a href="#ch2-get-clear-before-clipping">Get clear before clipping</a></li></ul>
+  </details>
+</li>
+<li class="whats-inside__item">
+  <details>
+    <summary>
+      <span class="whats-inside__num">03</span>
+      <span class="whats-inside__title">How to build a LoRA dataset</span>
+      <span class="whats-inside__plus" aria-hidden="true">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M8 2v12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </span>
+    </summary>
+    <ul class="whats-inside__sections"><li><a href="#ch3-quality-over-quantity">Quality over quantity</a></li><li><a href="#ch3-cut-the-clips">Cut the clips</a></li><li><a href="#ch3-write-good-captions">Write good captions</a></li><li><a href="#ch3-what-a-good-caption-looks-like">What a good caption looks like</a></li><li><a href="#ch3-preprocess-into-latents">Preprocess into latents</a></li></ul>
+  </details>
+</li>
+<li class="whats-inside__item">
+  <details>
+    <summary>
+      <span class="whats-inside__num">04</span>
+      <span class="whats-inside__title">Setting up a LoRA training run</span>
+      <span class="whats-inside__plus" aria-hidden="true">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M8 2v12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </span>
+    </summary>
+    <ul class="whats-inside__sections"><li><a href="#ch4-why-one-resolution-isnt-enough">Why one resolution isn’t enough</a></li><li><a href="#ch4-pick-your-approach">Pick your approach</a></li><li><a href="#ch4-the-practical-default-a-mixed-run">The practical default: a mixed run</a></li><li><a href="#ch4-the-chain-maximum-fidelity-when-you-have-the-compute">The chain: maximum fidelity when you have the compute</a></li><li><a href="#ch4-running-the-chain">Running the chain</a></li><li><a href="#ch4-set-the-rank-before-you-start">Set the rank before you start</a></li></ul>
+  </details>
+</li>
+<li class="whats-inside__item">
+  <details>
+    <summary>
+      <span class="whats-inside__num">05</span>
+      <span class="whats-inside__title">How to run and monitor LoRA training</span>
+      <span class="whats-inside__plus" aria-hidden="true">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M8 2v12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </span>
+    </summary>
+    <ul class="whats-inside__sections"><li><a href="#ch5-a-couple-of-settings-worth-checking-first">A couple of settings worth checking first</a></li><li><a href="#ch5-keep-the-sequence-length-in-a-workable-range">Keep the sequence length in a workable range</a></li><li><a href="#ch5-launch">Launch</a></li><li><a href="#ch5-watch-the-run">Watch the run</a></li><li><a href="#ch5-when-to-stop">When to stop</a></li><li><a href="#ch5-ship-it-publish-your-lora">Ship it: publish your LoRA</a></li></ul>
+  </details>
+</li>
+<li class="whats-inside__item">
+  <details>
+    <summary>
+      <span class="whats-inside__num">06</span>
+      <span class="whats-inside__title">What are IC-LoRAs &amp; how to use them</span>
+      <span class="whats-inside__plus" aria-hidden="true">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M8 2v12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </span>
+    </summary>
+    <ul class="whats-inside__sections"><li><a href="#ch6-what-an-ic-lora-is">What an IC-LoRA is</a></li><li><a href="#ch6-when-you-need-one-and-which-signal">When you need one, and which signal</a></li><li><a href="#ch6-build-the-dataset">Build the dataset</a></li><li><a href="#ch6-settings">Settings</a></li><li><a href="#ch6-running-it">Running it</a></li><li><a href="#ch6-what-breaks">What breaks</a></li></ul>
+  </details>
+</li>
+          </ul>
+        </section>
+        <article id="ch1" class="chapter">
+  <header class="chapter__cover">
+    <video class="chapter__video" poster="https://cdn.prod.website-files.com/68c6ddbeb26cbd692adc0291/6a6b513a35a9f771f66a84b5_6a6b50be135a1d66b60c0fd5_LoRATrainingGuide-HeroOut-01.webp" autoplay muted loop playsinline
+           preload="none" disablepictureinpicture aria-hidden="true" tabindex="-1" data-cover-video>
+      <source src="assets/chapter1.mp4" type="video/mp4">
+    </video>
+    <div class="chapter__scrim" aria-hidden="true"></div>
+    <div class="chapter__cover-inner">
+      <span class="chapter__pill">Chapter 01</span>
+      <h1 class="chapter__title heading-style-h2 text-balanced">When should you train a LoRA</h1>
+    </div>
+  </header>
+  <div class="synopsis"><ul>
+<li><strong>Dataset first.</strong> Quality beats quantity; data and captions are almost always the problem.</li>
+<li><strong>Train for what you need.</strong> Low resolution teaches motion, high resolution teaches detail.</li>
+<li><strong>Combine resolutions.</strong> One resolution can't do both — train at more than one.</li>
+</ul></div>
+  <div class="chapter__body rt"><p>Prompt LTX well and it will give you almost anything you can describe. Feed it a reference frame and it will animate what’s in it. A LoRA is for the case neither covers: when you need more control every time, across every shot. A specific face, voice, look, or move. No prompt writes its way to that, and no single frame carries it across a series. What a LoRA buys you is control and consistency: it learns the thing from your examples and reproduces it accurately, run after run.</p><p>This guide covers two kinds of LoRA. Most of it is about standard LoRAs, which learn a subject, style, or motion you activate with a prompt; the final chapter covers control LoRAs (IC-LoRAs), which drive video-to-video from a reference signal like depth or pose. Everything before it applies to both.</p><h2 class="heading-style-h2" id="ch1-whats-in-this-guide" data-section data-chapter="ch1"><strong>What’s in this guide</strong></h2><p>This guide walks the whole process of training a LoRA on LTX, in order, each chapter building on the last. The first time through, read them in sequence:</p><ol><li><strong>When to train a LoRA</strong>: what a LoRA gives you that a prompt can’t. You’re reading it.</li><li><strong>Decide what to train</strong>: pin down exactly what the model should learn before you collect your data.</li><li><strong>Build the dataset</strong>: preparing the clips and captions that drive how the LoRA works.</li><li><strong>Set up the training run</strong>: how to train across resolutions, from a simple mixed run to the full high-fidelity chain.</li><li><strong>Run and monitor training</strong>: launch the run, read the loss curve and validation samples, know when to stop, and publish the finished LoRA.</li><li><strong>Control LoRAs (IC-LoRA)</strong>: train depth, pose, or edge control for video-to-video.</li></ol><figure class="w-richtext-figure-type-image w-richtext-align-fullwidth" style="max-width:1920px" data-rt-type="image" data-rt-align="fullwidth" data-rt-max-width="1920px"><div><img alt="" src="https://cdn.prod.website-files.com/68c6ddbeb26cbd692adc0291/6a6b8ebb91f4097ed53b6b68_LoRATrainingGuide-%2301-Item1.webp" width="auto" height="auto" loading="lazy"></div></figure><h2 class="heading-style-h2" id="ch1-when-a-lora-is-the-right-tool" data-section data-chapter="ch1"><strong>When a LoRA is the right tool</strong></h2><p>If you can describe what you want, or hand the model a frame that shows it, and you’re fine with some variation shot to shot, just prompt or condition it. A LoRA is the right tool when you need more control: when the thing has to come out the same every time, when no prompt or input frame can supply it, or when it has to remain accurate across a whole series of shots.</p><p>These are the most common LoRA use cases:</p><ul><li><strong>A specific person’s likeness.</strong> A reference photo animates one face, but push it to a new angle or a scene you have no frame for and the identity drifts. A LoRA learns the person and generates them consistently.</li><li><strong>A particular voice or sound.</strong> A prompt gets you “a deep male voice,” not one specific voice with its exact timbre, and an image can’t supply sound at all. A LoRA learns it from samples.</li><li><strong>A signature motion or mannerism.</strong> Keyframes pin the poses, but the model fills the timing between them differently every run. “Walks confidently” doesn’t lock the walk; a motion LoRA does.</li><li><strong>A locked camera move.</strong> “Zoom out” gives you some zoom out, different every time. A camera LoRA gives the same move, framed the same, take after take.</li><li><strong>A look you can’t put into words.</strong> A reference frame carries a look into one shot, and only when you have a matching frame to feed. A LoRA learns the look from examples and applies it to anything you prompt.</li><li><strong>A character or world that stays consistent across many shots.</strong> Conditioning holds a look within a shot, not across a series: feed a new frame each time and the character drifts. A LoRA keeps the same character, outfit, and world stable across hundreds of shots.</li></ul><h2 class="heading-style-h2" id="ch1-tl-dr" data-section data-chapter="ch1"><strong>TL;DR</strong></h2><p>If you take nothing else from this guide, remember these three key points for LoRA training:</p><ul><li><strong>Dataset first.</strong> Quality beats quantity when training. When a LoRA underperforms, the data and captions are almost always where the problem is.</li><li><strong>Train for what you need.</strong> Low resolution teaches motion, high resolution teaches detail. Match the recipe to the goal.</li><li><strong>Combine resolutions.</strong> One resolution can’t teach both motion and fine detail. Train at more than one: a single mixed run for most setups, a multi-stage chain when you have the compute for high-resolution output.</li></ul><p><em>With a reason to train a LoRA, the next question is what exactly you’re teaching the model.</em>‍</p></div>
+</article><article id="ch2" class="chapter">
+  <header class="chapter__cover">
+    <video class="chapter__video" poster="https://cdn.prod.website-files.com/68c6ddbeb26cbd692adc0291/6a6b513b6c67c48c44d378b4_6a6b50be35561ec528af0269_LoRATrainingGuide-HeroOut-02.webp" autoplay muted loop playsinline
+           preload="none" disablepictureinpicture aria-hidden="true" tabindex="-1" data-cover-video>
+      <source src="assets/chapter2.mp4" type="video/mp4">
+    </video>
+    <div class="chapter__scrim" aria-hidden="true"></div>
+    <div class="chapter__cover-inner">
+      <span class="chapter__pill">Chapter 02</span>
+      <h1 class="chapter__title heading-style-h2 text-balanced">How to decide what LoRA to train</h1>
+    </div>
+  </header>
+  <div class="synopsis"><ul>
+<li><strong>Pin down the target.</strong> Decide what must stay constant and what's free to vary.</li>
+<li><strong>Pick a mode.</strong> Image-to-video is the safe default for character and style LoRAs.</li>
+<li><strong>Decide on audio.</strong> Most LoRAs are visual-only; add sound only if it's part of the concept.</li>
+</ul></div>
+  <div class="chapter__body rt"><p>Before you collect a single clip, you need to decide exactly what you want the LoRA to do at inference. Every later choice you make flows from this one. The questions below will help guide you through planning your dataset.</p><h2 class="heading-style-h2" id="ch2-whats-the-target-and-what-isnt" data-section data-chapter="ch2"><strong>What’s the target, and what isn’t</strong></h2><p>The target is whatever has to come out the same every time. It might be a specific character or person, a look or a style, a voice or sound, or a locked camera move. That’s what the LoRA is there to hold constant.</p><p>What is <em>not</em> the target matters just as much: the clothing, the setting, the lighting, the props, the framing, anything you want free to vary from shot to shot at inference. You want to lock what defines the thing, and leave everything else open.</p><p>Say you’re training a specific character. The target is that character’s look, shape, and the way they move. Everything else is free: the room they’re in, what they’re doing, the time of day. You want those to change shot to shot, so the dataset should show the character across lots of different settings.</p><p>Be specific about which features recur and which vary before you cut any clips.</p><figure class="w-richtext-figure-type-image w-richtext-align-fullwidth" style="max-width:1920px" data-rt-type="image" data-rt-align="fullwidth" data-rt-max-width="1920px"><div><img alt="" src="https://cdn.prod.website-files.com/68c6ddbeb26cbd692adc0291/6a6b8f3870f818037bb9b81b_LoRATrainingGuide-%2302-Item1.webp" width="auto" height="auto" loading="lazy"></div></figure><h2 class="heading-style-h2" id="ch2-one-shot-or-many" data-section data-chapter="ch2"><strong>One shot, or many?</strong></h2><p>How widely the LoRA has to work decides how much data you need.</p><ul><li><strong>Recurring</strong> (a series, a campaign, a character across many shots): it has to stay identical everywhere it appears, so the dataset has to cover the full range you’ll use it in, different angles, poses, expressions, and scenes.</li><li><strong>One job</strong> (a single shot, a single effect): the LoRA only has to do one thing, so the dataset can be tightly scoped and small.</li></ul><p>This split drives dataset size, which the next chapter goes into.</p><h2 class="heading-style-h2" id="ch2-choose-a-training-mode" data-section data-chapter="ch2"><strong>Choose a training mode</strong></h2><p>You also need to decide what kind of model you’re training. This guide is about LoRAs, small adapters that are quick to train and easy to share, and that’s the right choice for almost any character, style, or effect. Full fine-tuning (retraining the whole model) is heavier in every way and needs multiple high-end GPUs; save it for when a LoRA genuinely can’t capture what you need, and lean on the trainer docs when you do.</p><p>Within LoRA, the main choice is how the model will be driven when you generate. Generating from text alone is text-to-video; starting from a still is image-to-video. You don’t have to commit to one: the flexible default for a character or style LoRA is the image-to-video setup, which uses each clip’s first frame as an occasional guide during training (a probability, not every step). The resulting LoRA works either way at inference, from a prompt or from a starting image, so it’s the safe default. Go text-only only if you’re certain you’ll never start from an image.</p><p>The trainer handles more specialized jobs too, extending a clip, filling in masked regions, adding sound to silent video, and driving generation from a reference (that last one is Control LoRAs, later in this guide). If your goal is one of those, the trainer’s training-modes docs map each to its setup.</p><p>One more piece of the mode is whether your LoRA includes audio, which is the next question.</p><h2 class="heading-style-h2" id="ch2-does-it-need-audio" data-section data-chapter="ch2"><strong>Does it need audio?</strong></h2><p>LTX can generate audio as well as visuals, so decide up front whether the LoRA includes audio:</p><ul><li><strong>Visual only:</strong> leave audio off (with_audio: false). Most character and style LoRAs don’t need it. The base model still generates audio at inference as usual; a video-only LoRA just doesn’t shape it.</li><li><strong>Visual plus sound:</strong> a voice, music, or dialogue tied to the picture. Turn audio on (with_audio: true), and the captions have to describe the speech and sounds, not just what’s on screen.</li><li><strong>Audio is the goal:</strong> a specific voice or sound signature is the thing you’re training. Audio on, and build the dataset around the sound.</li></ul><p>Captioning for audio is covered in the next chapter.</p><h2 class="heading-style-h2" id="ch2-get-clear-before-clipping" data-section data-chapter="ch2"><strong>Get clear before clipping</strong></h2><p>Once you’ve answered these questions, write the answers down. That short spec is what you’ll check each clip against as you gather your dataset.</p><p><em>With the target pinned down, you can collect the clips and captions that teach it.</em>‍</p></div>
+</article><article id="ch3" class="chapter">
+  <header class="chapter__cover">
+    <video class="chapter__video" poster="https://cdn.prod.website-files.com/68c6ddbeb26cbd692adc0291/6a6b513c89da3e41238183af_6a6b50be69d5691a617056e5_LoRATrainingGuide-HeroOut-03.webp" autoplay muted loop playsinline
+           preload="none" disablepictureinpicture aria-hidden="true" tabindex="-1" data-cover-video>
+      <source src="assets/chapter3.mp4" type="video/mp4">
+    </video>
+    <div class="chapter__scrim" aria-hidden="true"></div>
+    <div class="chapter__cover-inner">
+      <span class="chapter__pill">Chapter 03</span>
+      <h1 class="chapter__title heading-style-h2 text-balanced">How to build a LoRA dataset</h1>
+    </div>
+  </header>
+  <div class="synopsis"><ul>
+<li><strong>Quality over quantity.</strong> A small, clean, on-topic set beats a big messy one.</li>
+<li><strong>Cut ~5s clips.</strong> One continuous action each, at the longest frame count you'll train.</li>
+<li><strong>Write dense captions.</strong> Concrete, consistent captions are where most quality comes from.</li>
+</ul></div>
+  <div class="chapter__body rt"><p>The dataset is the most important part of training, full stop. Investing time to create a solid training dataset will result in a much better outcome. Here’s what to focus on. This chapter is about the craft, what makes a dataset good; for the exact commands at each step, keep the trainer’s <a href="https://github.com/Lightricks/LTX-2/blob/main/packages/ltx-trainer/docs/dataset-preparation.md" target="_blank" rel="noopener noreferrer">Dataset Preparation guide</a> open alongside it.</p><h2 class="heading-style-h2" id="ch3-quality-over-quantity" data-section data-chapter="ch3"><strong>Quality over quantity</strong></h2><p>Every clip should show the target and as little extraneous content as possible. A small, clean, on-topic set beats a big messy one every time.</p><p>How many clips you need depends on how broad the concept is. A single character, a fixed likeness, or one narrow effect will need the fewest, around 25 to 50 clips. A simple motion or camera concept might need around 50 clips (control IC-LoRAs that learn from paired footage have their own sizing, covered later). A broad visual style is more conceptual and will need more clips to define the full style, often into the low hundreds. Treat these as rules of thumb, not hard requirements; there’s no magic clip count that guarantees a good LoRA.</p><p>Again, what the clips contain matters more than hitting an exact number of clips. A character needs variety, so the model learns the subject rather than one aspect of it. Setting also matters. If every clip has the character in the same kitchen (for example), the LoRA will quietly learn the kitchen as well as the character. Vary the settings so the only constant the model can latch onto is the character itself. Expect some experimentation, too. You’ll often get better results from improving or replacing weak clips than from adding more, and iterating on the dataset is a normal part of training.</p><p>Finally, also vary your shot distances and angles across your samples. If every clip is a close-up, the LoRA will be good at close-ups but struggle with wide shots. And if you’re isolating a subject on a plain background, use white rather than black.</p><figure class="w-richtext-figure-type-image w-richtext-align-fullwidth" style="max-width:1920px" data-rt-type="image" data-rt-align="fullwidth" data-rt-max-width="1920px"><div><img alt="" src="https://cdn.prod.website-files.com/68c6ddbeb26cbd692adc0291/6a6b9023bb6fd0a9c16a56b9_LoRATrainingGuide-%2303-Item1.webp" width="auto" height="auto" loading="lazy"></div></figure><h2 class="heading-style-h2" id="ch3-cut-the-clips" data-section data-chapter="ch3"><strong>Cut the clips</strong></h2><p>Once you’ve identified your target content, you need to cut your source video into short, scene-aware clips, commonly around five seconds each, at the longest frame count you plan to train on. There should be one continuous action in each. Avoid hard cuts in the middle of a clip. The <a href="https://github.com/Lightricks/LTX-2/blob/main/packages/ltx-trainer/docs/dataset-preparation.md#-step-1-split-scenes" target="_blank" rel="noopener noreferrer">trainer</a> ships a splitter (split_scenes.py) that will help you do this, with options for scene length and other useful commands.</p><p>Your clips don’t all need to be the same length, but each one has to be at least as long as the frame count you train it at. During preprocessing the trainer keeps only the first F frames of each clip and skips any clip shorter than F. Since you may train the same clips at more than one length, cut each one at least as long as the longest frame count in your plan; preprocessing trims the extra frames for the shorter stages.</p><p>Frame count is only half of a clip’s size; the other half is its resolution (the width and height), and the two together are what the trainer calls a bucket. You choose the resolution at preprocessing, and you can train at more than one (see the next chapter for more on this). What matters at cut time is source quality: start from footage at least as sharp as the resolution you’ll train at, because preprocessing can shrink a clip but can’t add detail that isn’t there.</p><p>Two things happen to every clip during preprocessing that are worth keeping in mind as you select clips: they will be center-cropped to the bucket’s shape, and only the first F frames are kept. So frame your subject near the center, keep anything important away from the edges, and put the action you care about at the start of each clip.</p><p>You can also train on stills, or mix images and video, by giving images a frame count of 1. Mixing the two takes a little extra config, which the dataset-preparation docs cover.</p><p><strong>Note: </strong>The frame count has to satisfy frames % 8 == 1, so valid values are 1, 9, 17, 25, 33, and so on in steps of 8, up through 121 and beyond; the width and height each have to be a multiple of 32. If you’re not sure where to start, about five seconds (121 frames) is a good default to use. More involved training runs can call for longer clips: some of the multi-stage recipes in the next chapter train at higher frame counts, so cut longer if that’s where you’re headed.</p><h2 class="heading-style-h2" id="ch3-write-good-captions" data-section data-chapter="ch3"><strong>Write good captions</strong></h2><p>This is where most of the quality comes from, and it’s the part people tend to cut corners on. Sloppy captions teach a sloppy LoRA, so invest time up front for a better result.</p><p>Here’s what makes a good caption:</p><ul><li><strong>Be dense and concrete.</strong> Describe what’s actually on screen: subject, action, setting, lighting, camera. Vague captions teach a vague LoRA.</li><li><strong>Stay consistent about the target.</strong> Describe constant features the same way every time, so the model anchors the concept on the same phrases. For the things that change (setting, action, lighting), describe them differently per clip. This is how the model learns what it’s free to change.</li><li><strong>When training audio, caption the sound too.</strong> Describe speech and sound effects, not just the picture.</li></ul><p>The trainer offers a <a href="https://github.com/Lightricks/LTX-2/blob/main/packages/ltx-trainer/docs/dataset-preparation.md#-step-2-caption-videos" target="_blank" rel="noopener noreferrer">captioner</a> that will create captions for your clips. Review the output before training, though, to make sure it does what you want.</p><h3 class="heading-style-h3"><strong>Do you need a trigger word?</strong></h3><p>A trigger word is an optional handle: a distinctive token you put at the front of every caption and then include in your prompt to activate the LoRA. Use one when you want an explicit on-switch, or to keep your subject from blurring into a common word.</p><p>If you use one, pick a distinct, made-up name the base model has no strong ideas about; a stylized spelling of your subject’s name works well. Avoid common words (robot, woman, anime); LTX already has associations for those, and your LoRA will fight them. LTX reads captions with a language model, so a readable, distinctive name works well. Pass it once at preprocessing (<code>--lora-trigger</code>) and it’s prepended to every caption for you.</p><h2 class="heading-style-h2" id="ch3-what-a-good-caption-looks-like" data-section data-chapter="ch3"><strong>What a good caption looks like</strong></h2><p>Here’s a real caption from a released cinemagraph LoRA, an effect that keeps a scene still except for one moving element. Notice how precisely it names what moves and what stays put:</p><figure class="w-richtext-figure-type-image w-richtext-align-fullwidth" style="max-width:1916px" data-rt-type="image" data-rt-align="fullwidth" data-rt-max-width="1916px"><div><img alt="" src="https://cdn.prod.website-files.com/68c6ddbeb26cbd692adc0291/6a6b9031ff5c639de49f15d4_LoRATrainingGuide-%2303-Item2.webp" width="auto" height="auto" loading="lazy"></div><figcaption><strong>Caption: </strong><em>“locked-off static camera, no camera movement, no zoom, no pan, no tilt, Only the ocean waves reflected in the man’s sunglasses move, rolling and crashing continuously inside the lenses while the man, the beach, the sky, and the rest of the scene remain completely still. The camera and the rest of the image remain completely still.”</em></figcaption></figure><p>Every part of the frame is accounted for, assigned to either moving or still, so the model has nothing to guess at. That precision is what teaches the effect; it even repeats the key point (<em>remain completely still</em>) to drive it home.</p><h2 class="heading-style-h2" id="ch3-preprocess-into-latents" data-section data-chapter="ch3"><strong>Preprocess into latents</strong></h2><p>One step stands between your finished dataset and training. Preprocessing encodes every clip and its caption into cached latents, the compressed form the model actually trains on; from there it never touches the raw video again. The trainer’s <a href="https://github.com/Lightricks/LTX-2/blob/main/packages/ltx-trainer/docs/dataset-preparation.md#-step-3-dataset-preprocessing" target="_blank" rel="noopener noreferrer">preprocess script</a> (process_dataset.py) handles it in a one-time pass, and the <a href="https://github.com/Lightricks/LTX-2/blob/main/packages/ltx-trainer/docs/dataset-preparation.md" target="_blank" rel="noopener noreferrer">Dataset Preparation guide</a> shows the exact command.</p><p>You run it once for each resolution you plan to train at, since the latents are baked at a specific frame count and size. Choosing those resolutions is the next chapter’s job; nothing else about the dataset changes. This is also where your trigger word gets added, so it never has to touch your captions by hand.</p><p>Before you commit to a run, it’s worth seeing what the model will actually train on. Add <code>--decode</code> and preprocessing writes the cropped, resized clips to .precomputed/decoded_videos (single images are saved there as PNGs), so you can open them and catch a bad crop or an over-trimmed clip in seconds.</p><p>One gotcha: if you re-run preprocessing after changing anything, the resolution, the model, or the trigger word, pass <code>--overwrite</code>. Without it, the script keeps the stale latents from the previous run.</p><p><em>With your dataset cut, captioned, and preprocessed, the next decision is what resolution to train at.</em></p></div>
+</article><article id="ch4" class="chapter">
+  <header class="chapter__cover">
+    <video class="chapter__video" poster="https://cdn.prod.website-files.com/68c6ddbeb26cbd692adc0291/6a6b513cb0e21fb616ea9a55_6a6b50be0329824dcedf87b1_LoRATrainingGuide-HeroOut-04.webp" autoplay muted loop playsinline
+           preload="none" disablepictureinpicture aria-hidden="true" tabindex="-1" data-cover-video>
+      <source src="assets/chapter4.mp4" type="video/mp4">
+    </video>
+    <div class="chapter__scrim" aria-hidden="true"></div>
+    <div class="chapter__cover-inner">
+      <span class="chapter__pill">Chapter 04</span>
+      <h1 class="chapter__title heading-style-h2 text-balanced">Setting up a LoRA training run</h1>
+    </div>
+  </header>
+  
+  <div class="chapter__body rt"><p>You have a dataset, you know what you want the LoRA to learn, and you’ve picked a training mode. The next decision is what resolution and clip length to train at. The short answer is more than one, and how you combine them comes down to how much compute you have.</p><p>This chapter covers why one resolution isn’t enough, the approach most people should start with, and the higher-fidelity path for when you have the hardware.</p><h2 class="heading-style-h2" id="ch4-why-one-resolution-isnt-enough" data-section data-chapter="ch4"><strong>Why one resolution isn’t enough</strong></h2><p>Train at a single resolution and you’re looking at a tradeoff, because resolution and the number of frames both cost memory and you can only spend so much per clip. Go low-resolution and you can afford a lot of frames: the LoRA sees movement and learns motion, how your subject moves and its overall shape, but it never sees fine detail. Go high-resolution and you can only afford a few frames: the LoRA learns sharp texture and detail but sees too little movement. Each setting teaches a different slice of what you want.</p><p>For a narrow concept it may not matter: a tight style LoRA or a camera-move LoRA has one thing to learn, and a single resolution is enough. But for anything that has to get both motion and detail right, a single resolution is unlikely to do the whole job. The solution is to train the same dataset at more than one resolution.</p><figure class="w-richtext-figure-type-image w-richtext-align-fullwidth" style="max-width:1920px" data-rt-type="image" data-rt-align="fullwidth" data-rt-max-width="1920px"><div><img alt="" src="https://cdn.prod.website-files.com/68c6ddbeb26cbd692adc0291/6a6b8ff4eacf6cb1a7908d47_LoRATrainingGuide-%2304-Item1.webp" width="auto" height="auto" loading="lazy"></div></figure><h2 class="heading-style-h2" id="ch4-pick-your-approach" data-section data-chapter="ch4"><strong>Pick your approach</strong></h2><p>There are three ways to cover more than one resolution in a LoRA. The right one depends on what the LoRA has to learn and, just as much, on the compute you have and the resolution you need out of it.</p><div data-rt-embed-type='true'><!-- ✅ START: recipe comparison table -->
+<div class="comparison-table-wrapper">
+  <table class="comparison-table comparison-table-simple">
+    <thead>
+      <tr>
+        <th>Recipe</th>
+        <th>What you run</th>
+        <th>Use it when</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr>
+        <td>Single</td>
+        <td>One bucket, one run</td>
+        <td>The LoRA has only one thing to learn, like a narrow style, a camera move, or short clips. Also the cheapest.</td>
+      </tr>
+      <tr>
+        <td>Mixed</td>
+        <td>One run that trains several resolution buckets together</td>
+        <td>Recommended for most. Train at around half your target output resolution and upscale at inference.</td>
+      </tr>
+      <tr>
+        <td>Chain</td>
+        <td>Three runs, low then mid then high, each warm-started from the last</td>
+        <td>Maximum fidelity at high output resolution, when you have the compute to train and generate there.</td>
+      </tr>
+    </tbody>
+  </table>
+</div></div><p>The mixed and single paths don’t need a multi-GPU cluster; a single GPU is enough. A single-bucket run is just the mixed workflow with one entry in --resolution-buckets, so the steps below cover it too (skip the multi-bucket batch-size rule, which only applies when you train several buckets at once).</p><p>If you’re not sure, start with a mixed run. It’s the simplest option that still gives you multi-resolution coverage. Use a chained run when you’re training for high-resolution output and have the compute to handle it.</p><h2 class="heading-style-h2" id="ch4-the-practical-default-a-mixed-run" data-section data-chapter="ch4"><strong>The practical default: a mixed run</strong></h2><p>A mixed run trains several resolution buckets in one go. You preprocess once, listing every bucket, then launch a single training run.</p><p>Pick buckets that fit comfortably on your GPU. Training smaller doesn’t cap the size you can generate later (you upscale at inference); it only changes how much fine detail the LoRA absorbs from your footage, so for most concepts training smaller isn’t a sacrifice. A solid, healthy default is 1280×704×81, and you can shift that same budget toward motion (lower resolution, more frames) or detail (higher resolution, fewer frames). For a mixed run, combine a lower-resolution, longer-frame bucket for motion with a higher-resolution, shorter-frame one for detail.</p><div data-rt-embed-type='true'><!-- ✅ START: code block -->
+<div class="code-card"><button class="code-card__copy" type="button" aria-label="Copy code" data-copy-code><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2.5"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button><pre class="code-card__body"><code># Preprocess all buckets in one pass (semicolon-separated)
+uv run python scripts/process_dataset.py dataset.json \
+    --resolution-buckets "960x544x121;1280x704x81" \
+    --model-path /path/to/ltx-2-model.safetensors \
+    --text-encoder-path /path/to/gemma-model \
+    --lora-trigger "your_trigger"
+# Train once
+uv run python scripts/train.py configs/mixed.yaml</code></pre></div></div><p>One requirement: when a run trains more than one bucket, set optimization.batch_size: 1 in the config. The trainer can’t batch clips of different shapes together.</p><h2 class="heading-style-h2" id="ch4-the-chain-maximum-fidelity-when-you-have-the-compute" data-section data-chapter="ch4">The chain: maximum fidelity when you have the compute</h2><p>The chain trains the same dataset at low, then mid, then high resolution in sequence, each stage warm-started from the last, so a single LoRA ends up with everything: the motion from the low-resolution stage and the fine detail from the high-resolution one. It’s the approach we use internally for production-quality, high-resolution work: more to run than a mixed pass, but its payoff is the high-resolution stage, so it earns its keep when you can train and generate at that resolution.</p><div data-rt-embed-type='true'><!-- ✅ START: parameter grid -->
+<div class="comparison-table-wrapper">
+  <table class="comparison-table comparison-table-grid">
+    <thead>
+      <tr>
+        <th>Parameter</th>
+        <th>Stage 1 (low)</th>
+        <th>Stage 2 (mid)</th>
+        <th>Stage 3 (high)</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr>
+        <td>Resolution (W×H)</td>
+        <td>512×288</td>
+        <td>960×544</td>
+        <td>1920×1088</td>
+      </tr>
+      <tr>
+        <td>Frame count (F)</td>
+        <td>321</td>
+        <td>121</td>
+        <td>33</td>
+      </tr>
+      <tr>
+        <td>Learning rate</td>
+        <td>1.0e-4</td>
+        <td>5e-5</td>
+        <td>2e-5</td>
+      </tr>
+    </tbody>
+  </table>
+</div></div><p>Two things change across the stages; everything else stays put.</p><p>Frame count drops as resolution climbs, from 321 to 121 to 33. This isn’t stylistic: it keeps the amount the model has to process per clip in a workable range, so long low-res clips and short high-res clips cost about the same. (The math, and the limit you stay under, is in Run and monitor training.)</p><p>Learning rate decays each stage, from 1.0e-4 to 5e-5 to 2e-5. Each stage starts from the previous stage’s weights, so a high rate would wash out what the earlier stage learned. Lowering it lets each stage refine rather than overwrite.</p><p>Held constant across every stage: the rank, the alpha (keep it equal to the rank), the first-frame conditioning probability (from your training mode), and whether audio is on.</p><h2 class="heading-style-h2" id="ch4-running-the-chain" data-section data-chapter="ch4">Running the chain</h2><p>A chain is three ordinary training runs where each one starts from the last: preprocess each stage’s resolution, then launch the three runs in sequence.</p><p>Preprocess once per stage, changing only the bucket, with the same dataset and trigger word each time.</p><div data-rt-embed-type='true'><!-- ✅ START: code block -->
+<div class="code-card"><button class="code-card__copy" type="button" aria-label="Copy code" data-copy-code><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2.5"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button><pre class="code-card__body"><code>uv run python scripts/process_dataset.py dataset.json \
+    --resolution-buckets "512x288x321" \
+    --model-path /path/to/ltx-2-model.safetensors \
+    --text-encoder-path /path/to/gemma-model \
+    --lora-trigger "your_trigger"</code></pre></div></div><p>Run that three times, once per stage, with <code>--resolution-buckets</code> set to 512x288x321, then 960x544x121, then 1920x1088x33.</p><p>Train stage 1 from the base model, then warm-start each later stage by pointing model.load_checkpoint at the previous stage’s final weights.</p><div data-rt-embed-type='true'><!-- ✅ START: code block -->
+<div class="code-card"><button class="code-card__copy" type="button" aria-label="Copy code" data-copy-code><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2.5"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button><pre class="code-card__body"><code># Stage 1: train from the base model
+uv run python scripts/train.py configs/stage1.yaml
+# Stages 2 and 3: warm-start from the previous stage's weights
+model:
+  load_checkpoint: outputs/stage1/lora_weights.safetensors</code></pre></div></div><p>Point load_checkpoint at the LoRA weights file (lora_weights.safetensors), not a full training-state checkpoint. Loading the weights carries the learning forward while letting each stage set its own learning rate; resuming from full state can pin the rate to the previous stage’s value.</p><p>For each later stage, set its resolution, frame count, and learning rate from the table, point load_checkpoint at the prior stage’s weights, and launch. The output of stage 3 is your finished LoRA. On multiple GPUs, wrap each train.py call with accelerate launch as the Training Guide shows.</p><p>Watch out: each stage must use the preprocessed data for its own bucket. Don’t point stage 3 at stage 1’s data.</p><h2 class="heading-style-h2" id="ch4-set-the-rank-before-you-start" data-section data-chapter="ch4">Set the rank before you start</h2><p>Rank sets how much the LoRA can learn. Higher rank means more capacity, but also a heavier file, more memory, and more training time, so pick the lowest rank that captures your concept cleanly. As a starting point, a single character or style wants 32 to 64, a dense multi-character world wants 96 to 128, and a pure motion or camera LoRA wants only 8 to 16. (The Configuration Reference lists every LoRA parameter, including rank.)</p><p>Pick it before you start, and if you’re chaining, know that it’s fixed across all the stages, so you can’t change your mind later. A single character with a strong style is a reasonable rank-64 case: enough capacity to hold the look without paying for a series-scale LoRA.</p><p>With an approach and a rank chosen, you’re ready to launch and watch what the run is doing.</p></div>
+</article><article id="ch5" class="chapter">
+  <header class="chapter__cover">
+    <video class="chapter__video" poster="https://cdn.prod.website-files.com/68c6ddbeb26cbd692adc0291/6a6b5143ff2fc938f539f2d5_6a6b50bf35561ec528af0347_LoRATrainingGuide-HeroOut-05.webp" autoplay muted loop playsinline
+           preload="none" disablepictureinpicture aria-hidden="true" tabindex="-1" data-cover-video>
+      <source src="assets/chapter5.mp4" type="video/mp4">
+    </video>
+    <div class="chapter__scrim" aria-hidden="true"></div>
+    <div class="chapter__cover-inner">
+      <span class="chapter__pill">Chapter 05</span>
+      <h1 class="chapter__title heading-style-h2 text-balanced">How to run and monitor LoRA training</h1>
+    </div>
+  </header>
+  <div class="synopsis"><ul>
+<li><strong>Watch the samples, not the loss.</strong> Validation clips are the real signal.</li>
+<li><strong>Stop when they stop improving.</strong> Watch for underfitting and overfitting.</li>
+<li><strong>Keep every checkpoint.</strong> So you can pick the best one after the run.</li>
+</ul></div>
+  <div class="chapter__body rt"><p>A training run is where the dataset, captions, and configuration you’ve prepared become an actual LoRA, and it commits real time and GPU compute to get there. Launching it is straightforward; the harder skill is reading what the run is doing and knowing when to stop. This chapter covers the settings worth a deliberate choice before you start, how to launch, how to tell a healthy run from one worth cutting short, and how to publish the finish ed LoRA.</p><h2 class="heading-style-h2" id="ch5-a-couple-of-settings-worth-checking-first" data-section data-chapter="ch5">A couple of settings worth checking first</h2><p>Most of the config has sensible defaults, and the Configuration Reference documents the full surface. Two settings are worth a deliberate choice before you launch.</p><p>Target modules, if you’re training an identity. By default a LoRA adapts the attention layers, which is enough for a style or a simple concept. For a character or anything that has to hold a consistent identity, also target the feed-forward layers; they give the LoRA the capacity to keep the identity together, and it’s the difference between a character LoRA that holds and one that drifts.</p><div data-rt-embed-type='true'><!-- ✅ START: code block -->
+<div class="code-card"><button class="code-card__copy" type="button" aria-label="Copy code" data-copy-code><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2.5"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button><pre class="code-card__body"><code>lora:
+  target_modules: ["to_k", "to_q", "to_v", "to_out.0", "ff.net.0.proj", "ff.net.2"]</code></pre></div></div><p>One caveat: if you’re training audio and video together, targeting the shared blocks this broadly can bleed into the audio and degrade it. For a joint audio-video LoRA, be more selective; the Configuration Reference lists the exact video-only, audio-only, and cross-modal module patterns.</p><p>Keep your checkpoints. Set checkpoints.keep_last_n: -1 to keep every checkpoint. The default keeps only the most recent few, and you’ll often want to go back to an earlier step once you see how the run turned out. Checkpoints are cheap next to the cost of retraining.</p><h2 class="heading-style-h2" id="ch5-keep-the-sequence-length-in-a-workable-range" data-section data-chapter="ch5">Keep the sequence length in a workable range</h2><p>Resolution and frame count together set each clip’s sequence length, the cost of training on that clip: (W/32) × (H/32) × ((F-1)/8 + 1). Treat it as a budget: aim for around 8,000 per clip, and don’t go above 15,000. Past that, previews turn to mush and the run stops learning properly. A solid default that sits in the healthy range is 1280×704×81.</p><p>This tradeoff is what drives the previous chapter’s recipes: the chain inverts frame count as resolution climbs, and a mixed run pairs a low-resolution, long-frame bucket with a high-resolution, short-frame one. If the previews fall apart or the run stops improving right after you push resolution or frames up, check the cost of your clips first, then lower the resolution, the frame count, or the rank.</p><h2 class="heading-style-h2" id="ch5-launch" data-section data-chapter="ch5">Launch</h2><p>Start the run with the trainer’s launch command; on multiple GPUs, wrap it with accelerate as the Training Guide shows.</p><div data-rt-embed-type='true'><!-- ✅ START: code block -->
+<div class="code-card"><button class="code-card__copy" type="button" aria-label="Copy code" data-copy-code><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2.5"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button><pre class="code-card__body"><code>uv run python scripts/train.py configs/mixed.yaml</code></pre></div></div><p>Then leave it alone and watch, which is the actual skill.</p><h2 class="heading-style-h2" id="ch5-watch-the-run" data-section data-chapter="ch5">Watch the run</h2><p>Three things tell you how a run is going, in increasing order of usefulness.</p><p>The loss curve should trend down, but it’s noisy and jumps around, and a lower loss doesn’t reliably mean a better LoRA. Read the shape, not the wiggles, and don’t stop a run just because loss flattened.</p><p>The validation samples are the real signal, but read them the right way. The trainer makes these sample videos small and rough on purpose, so you can watch the run without waiting for a full render each time. Use them to answer “is it learning the thing?” - meaning, is the character recognizable, is the style coming through, is the movement appearing? Something that looks messy here can be clean in a real render. Judge final quality only on a full-size render, and don’t kill a run just because its previews look rough.</p><p>A tracker like Weights &amp; Biases, if you enable it in the trainer, puts the loss and the validation videos in one place and lets you compare runs. Tag your runs (dataset version, recipe) so you can tell them apart later and easily find the ones that worked best.</p><h2 class="heading-style-h2" id="ch5-when-to-stop" data-section data-chapter="ch5">When to stop</h2><p>Stop when the validation samples stop getting better, not when the loss hits a specific number. Two failure patterns to watch for:</p><figure class="w-richtext-figure-type-image w-richtext-align-fullwidth" style="max-width:1920px" data-rt-type="image" data-rt-align="fullwidth" data-rt-max-width="1920px"><div><img alt="" src="https://cdn.prod.website-files.com/68c6ddbeb26cbd692adc0291/6a6b907eb722d58f630827db_LoRATrainingGuide-%2305-Item1.webp" width="auto" height="auto" loading="lazy"></div></figure><p>The sweet spot is the checkpoint where the target is fully there and the LoRA still follows your prompts. Because you kept every checkpoint, you can go back and pick it.</p><p>To test a finished LoRA, see whether it performs with content it wasn’t trained on. Before you train, hold back three to five clips; once you have a checkpoint you like, generate against those held-out examples. If the LoRA handles them well, you taught it the concept; if it only reproduces the clips it trained on, it memorized them, and you need more variety in the dataset.</p><h2 class="heading-style-h2" id="ch5-ship-it-publish-your-lora" data-section data-chapter="ch5">Ship it: publish your LoRA</h2><p>Once you have a checkpoint you’re happy with, publishing it makes the LoRA easy to reuse and share. The trainer can push straight to the Hugging Face Hub: set push_to_hub: true and a hub_model_id in your config, and it uploads the weights along with a model card carrying your training config, sample videos, and validation prompts.</p><p>The piece that shouldn’t be automated is prompting guidance. Your LoRA learned from long, detailed captions in one particular style, so it performs best when prompted the same way: dense and concrete, trigger-word-first if you used a trigger. Someone picking it up won’t know that unless you tell them, so put it in the README: give the trigger word, describe the caption style, and include a couple of example prompts they can copy.</p><p>That’s the core workflow: decide, build the dataset, train, monitor, and ship. One more chapter covers a different kind of LoRA: control</p></div>
+</article><article id="ch6" class="chapter">
+  <header class="chapter__cover">
+    <video class="chapter__video chapter__video--flipped" poster="https://cdn.prod.website-files.com/68c6ddbeb26cbd692adc0291/6a6b514473d0374d892e39af_6a6b50bf2d1424b669791731_LoRATrainingGuide-HeroOut-06.webp" autoplay muted loop playsinline
+           preload="none" disablepictureinpicture aria-hidden="true" tabindex="-1" data-cover-video>
+      <source src="assets/chapter6.mp4" type="video/mp4">
+    </video>
+    <div class="chapter__scrim" aria-hidden="true"></div>
+    <div class="chapter__cover-inner">
+      <span class="chapter__pill">Chapter 06</span>
+      <h1 class="chapter__title heading-style-h2 text-balanced">What are IC-LoRAs &amp; how to use them</h1>
+    </div>
+  </header>
+  <div class="synopsis"><ul>
+<li><strong>Driven by a reference.</strong> An IC-LoRA uses depth, pose, or edges — not a prompt.</li>
+<li><strong>Paired dataset.</strong> Reference + target videos at the same frame count.</li>
+<li><strong>Downscale structure, not appearance.</strong> Start rank low, around 16–32.</li>
+</ul></div>
+  <div class="chapter__body rt"><p>The last five chapters followed a single path end to end: building a standard LoRA, one you invoke with a prompt to bring back a character, a style, or a look. This chapter steps off that path. A control LoRA is driven at inference by a reference video: a depth map, a pose skeleton, or an edge map, rather than by a prompt, so you steer the structure and motion of a generation from an input instead of only describing it. These are called IC-LoRAs (In-Context LoRAs).</p><p>Most of the craft carries over, you still curate a dataset, caption it, preprocess, and train, but the dataset is built from paired videos and a few settings differ. This chapter covers what’s different.</p><p>A note on terms: here the reference is the control input you feed in and the target is the video you want out, a different sense of “target” than in the rest of the guide.</p><h2 class="heading-style-h2" id="ch6-what-an-ic-lora-is" data-section data-chapter="ch6">What an IC-LoRA is</h2><p>An IC-LoRA is trained on pairs: a reference video (say, a pose skeleton) and the target video you want that reference to produce. The model learns the transformation from one to the other. At inference you hand it a new reference, and it generates a video that follows it. The same mechanism handles more than structural control: deblurring, colorization, style transfer, and restoration are all reference-to-target transformations you can train this way.</p><figure class="w-richtext-figure-type-image w-richtext-align-fullwidth" style="max-width:1920px" data-rt-type="image" data-rt-align="fullwidth" data-rt-max-width="1920px"><div><img alt="" src="https://cdn.prod.website-files.com/68c6ddbeb26cbd692adc0291/6a6b909f60858e909b5158ee_LoRATrainingGuide-%2306-Item1.webp" width="auto" height="auto" loading="lazy"></div></figure><h2 class="heading-style-h2" id="ch6-when-you-need-one-and-which-signal" data-section data-chapter="ch6">When you need one, and which signal</h2><p>You don’t always need an IC-LoRA. For plain video-to-video, use the ordinary pipeline; only bring in a control LoRA when you’re actually driving generation with a control signal. When you are, the signal you pick depends on what you’re controlling:</p><p>One reality check: a control signal drives structure from the reference. It won’t invent camera moves or angles the reference doesn’t already contain.</p><h2 class="heading-style-h2" id="ch6-build-the-dataset" data-section data-chapter="ch6">Build the dataset</h2><p>The dataset is pairs of videos, a reference and a target, with the same frame count. You generate the reference signal from your target clips with the trainer’s helper:</p><div data-rt-embed-type='true'><!-- ✅ START: code block -->
+<div class="code-card"><button class="code-card__copy" type="button" aria-label="Copy code" data-copy-code><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2.5"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button><pre class="code-card__body"><code>uv run python scripts/compute_reference.py scenes_output_dir/ \
+    --output scenes_output_dir/dataset.json</code></pre></div></div><p>It produces Canny edge references by default; edit the compute_reference() function to compute depth maps, pose skeletons, or another signal.</p><p>Two things make this affordable and reliable:</p><p>How many pairs you need scales with how complex the transformation is. A narrow, well-defined control signal can train on several hundred pairs; a demanding job needs considerably more. Lightricks’ Ingredients IC-LoRA, which conditions an entire scene on a reference sheet, was trained on roughly 2,000 pairs.</p><h2 class="heading-style-h2" id="ch6-settings" data-section data-chapter="ch6">Settings</h2><p>Set the strategy to video-to-video and point it at the reference latents:</p><div data-rt-embed-type='true'><!-- ✅ START: code block -->
+<div class="code-card"><button class="code-card__copy" type="button" aria-label="Copy code" data-copy-code><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2.5"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button><pre class="code-card__body"><code>model:
+  training_mode: lora
+training_strategy:
+  name: video_to_video
+  reference_latents_dir: reference_latents</code></pre></div></div><p>On rank, keep alpha equal to rank and scale both to the difficulty of the transformation. A single, well-defined structural signal (one depth or pose stream) needs little capacity, so start low, around 16 to 32. A complex transformation needs much more: the Ingredients IC-LoRA trained at rank 128 (alpha 128). Start conservative and raise the rank if the LoRA isn’t capturing what you want.</p><p>Because an IC-LoRA processes the reference and the target together, the sequence length roughly doubles, so training and inference are slower than a plain LoRA. The reference downscale is your main lever for keeping that in check. Your validation config also needs reference_videos and a reference_downscale_factor that matches preprocessing.</p><h2 class="heading-style-h2" id="ch6-running-it" data-section data-chapter="ch6">Running it</h2><p>Preprocess the pairs (note the reference options), train against the video-to-video config, then generate with the IC-LoRA inference pipeline.</p><div data-rt-embed-type='true'><!-- ✅ START: code block -->
+<div class="code-card"><button class="code-card__copy" type="button" aria-label="Copy code" data-copy-code><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2.5"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button><pre class="code-card__body"><code>uv run python scripts/process_dataset.py dataset.json \
+    --resolution-buckets "768x448x49" \
+    --model-path /path/to/ltx-2-model.safetensors \
+    --text-encoder-path /path/to/gemma-model \
+    --reference-column "reference_path" \
+    --reference-downscale-factor 2</code></pre></div></div><p>Train as usual, then run inference with the ICLoraPipeline from the ltx-pipelines package.</p><h2 class="heading-style-h2" id="ch6-what-breaks" data-section data-chapter="ch6">What breaks</h2><p>Control LoRAs have their own failure modes. The common ones:</p><figure class="w-richtext-figure-type-image w-richtext-align-fullwidth" style="max-width:1920px" data-rt-type="image" data-rt-align="fullwidth" data-rt-max-width="1920px"><div><img alt="" src="https://cdn.prod.website-files.com/68c6ddbeb26cbd692adc0291/6a6b90c1037f831d8c97fc49_LoRATrainingGuide-%2306-Item2.webp" width="auto" height="auto" loading="lazy"></div></figure><p>Control LoRAs also stack with the concept LoRAs from the rest of this guide: you can drive your character LoRA with a pose or depth reference to put your subject through a motion you control.</p><p>That’s the whole workflow, from deciding what to train through shipping a LoRA and controlling it. For the mechanics behind any step, the LTX trainer documentation is the reference.</p></div>
+</article>
+      </main>
+    </div>
+
+    <footer class="ftr">
+      <span>LTX · LoRA Training Guide</span>
+      <span>© Lightricks. Content from the <a href="https://ltx.io/blog" target="_blank" rel="noopener noreferrer">LTX blog</a>.</span>
+    </footer>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

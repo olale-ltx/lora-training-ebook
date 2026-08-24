@@ -353,8 +353,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   inset: 0;
   z-index: -1;
   background:
-    linear-gradient(to top, rgba(11, 11, 11, 0.68) 0%, rgba(11, 11, 11, 0.26) 40%, rgba(11, 11, 11, 0) 74%),
-    linear-gradient(100deg, rgba(11, 11, 11, 0.48) 0%, rgba(11, 11, 11, 0.1) 48%, rgba(11, 11, 11, 0) 72%);
+    linear-gradient(to top, rgba(11, 11, 11, 0.55) 0%, rgba(11, 11, 11, 0.18) 42%, rgba(11, 11, 11, 0) 72%),
+    linear-gradient(100deg, rgba(11, 11, 11, 0.32) 0%, rgba(11, 11, 11, 0) 45%);
 }
 .hero__inner {
   position: relative;

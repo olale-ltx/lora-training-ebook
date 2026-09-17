@@ -321,6 +321,83 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 @media (max-width: 900px) { body { padding-top: var(--mh-height, 52px); } }
 
+.mh__ctas {
+  flex-direction: column;
+  width: 100%;
+  /* Hairline sits flush under the last chapter row (like borders between items).
+     The air before the buttons lives below the line, not above it. */
+  margin-top: 0;
+  padding-block: var(--space-md) var(--space-lg);
+  border-top: 1px solid var(--color-border);
+}
+.mh__ctas .ltx-btn { width: 100%; }
+@media (min-width: 901px) { .mh__ctas { display: none; } }
+
+/* ==========================================================================
+   LTX buttons (ltx.io ltx-but-base)
+   ========================================================================== */
+
+.ltx-btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.8rem 1.6rem 0.9rem;
+  border: 1px solid var(--ltx-black);
+  border-radius: 0.3rem;
+  background-color: transparent;
+  color: var(--ltx-black);
+  font-family: var(--font-sans);
+  font-size: var(--fs-medium);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.03rem;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    transform 0.35s cubic-bezier(0.165, 0.84, 0.44, 1),
+    background-color var(--transition-base),
+    color var(--transition-base),
+    border-color var(--transition-base);
+}
+.ltx-btn:hover { transform: translateY(-3px); }
+.ltx-btn--primary {
+  background-color: var(--ltx-black);
+  color: var(--ltx-white);
+  border-color: var(--ltx-offwhite);
+}
+.ltx-btn--secondary { background-color: transparent; }
+
+.nav-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: flex-start;
+}
+/* .nav-ctas gap must not win over the drawer — it comes later in the file. */
+.mh__ctas.nav-ctas { gap: var(--space-2xs); }
+
+@media (min-width: 901px) {
+  /* Tighten only the air below the chapter list; logo → nav keeps .rail__inner gap. */
+  .rail__ctas {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    margin-top: calc(var(--space-md) - var(--space-xl));
+    min-width: 0;
+    width: 100%;
+  }
+  .rail__ctas-lead {
+    margin: 0;
+    min-width: 0;
+    max-width: 100%;
+    text-wrap: balance;
+  }
+  .rail__ctas-actions.nav-ctas {
+    min-width: 0;
+    max-width: 100%;
+  }
+}
+
 /* ==========================================================================
    Cover
    ========================================================================== */
@@ -331,7 +408,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   overflow: hidden;
   display: flex;
   margin-top: var(--space-md);
-  margin-bottom: var(--space-lg);
+  margin-bottom: var(--space-md);
   min-height: min(78vh, 44rem);
   border-radius: var(--radius-md);
   background-color: var(--ltx-grey-dark);
@@ -438,7 +515,13 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   overflow-x: hidden;
   scrollbar-width: thin;
 }
-.rail__inner { display: flex; flex-direction: column; gap: var(--space-xl); }
+.rail__inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  min-width: 0;
+  width: 100%;
+}
 .rail__logo {
   display: inline-flex;
   opacity: 0;
@@ -553,7 +636,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   transform: scaleX(var(--progress, 0));
 }
 
-.content { min-width: 0; padding-block: var(--space-xl) var(--space-2xl); }
+.content { min-width: 0; padding-block: var(--space-md) var(--space-2xl); }
 
 @media (max-width: 900px) {
   .shell { display: block; }

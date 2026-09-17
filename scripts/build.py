@@ -30,6 +30,27 @@ COVER_VIDEOS = {"ch2": "assets/chapter2-upd.mp4"}
 # time and setupCoverVideos pauses whichever is hidden.
 MOBILE_COVERS = {"ch2": {"src": "assets/hero.mp4", "poster": "assets/hero-poster.jpg"}}
 
+LTX_HOME_URL = "https://ltx.io/"
+LTX_TRY_NOW_URL = "https://app.ltx.io/"
+LTX_SALES_URL = (
+    "https://ltx.io/forms/ltx-contact-sales?kpi=licensing&placement=lora-training-guide"
+)
+
+
+def nav_ctas_html(prefix: str) -> str:
+    buttons = f"""          <a class="ltx-btn ltx-btn--primary" href="{LTX_SALES_URL}" target="_blank" rel="noopener noreferrer">Talk to Sales</a>
+          <a class="ltx-btn ltx-btn--secondary" href="{LTX_TRY_NOW_URL}" target="_blank" rel="noopener noreferrer">Try Now</a>"""
+    if prefix == "rail":
+        return f"""        <div class="rail__ctas">
+          <p class="rail__ctas-lead heading-style-h3">Questions? We&rsquo;re happy to help.</p>
+          <div class="rail__ctas-actions nav-ctas">
+{buttons}
+          </div>
+        </div>"""
+    return f"""        <div class="{prefix}__ctas nav-ctas">
+{buttons}
+        </div>"""
+
 
 def asset_version(name: str) -> str:
     """Short content hash appended to local asset URLs.
@@ -493,7 +514,7 @@ def page(chapters: list[dict]) -> str:
 <body>
   <header class="mh" data-mobile-header>
     <div class="mh__bar">
-      <a class="mh__logo" href="#top" aria-label="LTX">
+      <a class="mh__logo" href="{LTX_HOME_URL}" aria-label="LTX">
         <img src="assets/ltx-logo-black.svg" alt="LTX" width="91" height="39">
       </a>
       <button class="mh__toggle" type="button" aria-label="Open chapter menu" aria-expanded="false" aria-controls="mh-drawer" data-mh-toggle>
@@ -512,6 +533,7 @@ def page(chapters: list[dict]) -> str:
           {nav_items_html(chapters, "mh")}
         </ol>
       </nav>
+{nav_ctas_html("mh")}
     </div>
     <button class="mh__scrim" type="button" aria-label="Close chapter menu" tabindex="-1" data-mh-scrim></button>
   </header>
@@ -528,7 +550,7 @@ def page(chapters: list[dict]) -> str:
       </video>
       <div class="hero__scrim" aria-hidden="true"></div>
       <div class="hero__inner">
-        <a class="hero__logo" href="#top" aria-label="LTX">
+        <a class="hero__logo" href="{LTX_HOME_URL}" aria-label="LTX">
           <img src="assets/ltx-logo-black.svg" alt="LTX" width="91" height="39">
         </a>
         <div class="hero__copy">
@@ -541,7 +563,7 @@ def page(chapters: list[dict]) -> str:
     <div class="shell">
       <aside class="rail" aria-label="Table of contents">
         <div class="rail__inner">
-          <a class="rail__logo" href="#top" aria-label="LTX">
+          <a class="rail__logo" href="{LTX_HOME_URL}" aria-label="LTX">
             <img src="assets/ltx-logo-black.svg" alt="LTX" width="91" height="39">
           </a>
           <nav class="rail__nav">
@@ -549,6 +571,7 @@ def page(chapters: list[dict]) -> str:
               {nav_items_html(chapters, "rail")}
             </ol>
           </nav>
+{nav_ctas_html("rail")}
         </div>
       </aside>
 

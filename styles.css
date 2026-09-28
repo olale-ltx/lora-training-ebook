@@ -377,12 +377,12 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .mh__ctas.nav-ctas { gap: var(--space-2xs); }
 
 @media (min-width: 901px) {
-  /* Tighten only the air below the chapter list; logo → nav keeps .rail__inner gap. */
+  /* Logo → nav uses .rail__inner gap only; cancel the old pull-up so nav → CTA matches. */
   .rail__ctas {
     display: flex;
     flex-direction: column;
     gap: var(--space-sm);
-    margin-top: calc(var(--space-md) - var(--space-xl));
+    margin-top: 0;
     min-width: 0;
     width: 100%;
   }

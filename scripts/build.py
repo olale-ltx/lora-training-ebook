@@ -38,11 +38,11 @@ LTX_SALES_URL = (
 
 
 def nav_ctas_html(prefix: str) -> str:
-    buttons = f"""          <a class="ltx-btn ltx-btn--primary" href="{LTX_SALES_URL}" target="_blank" rel="noopener noreferrer">Talk to Sales</a>
-          <a class="ltx-btn ltx-btn--secondary" href="{LTX_TRY_NOW_URL}" target="_blank" rel="noopener noreferrer">Try Now</a>"""
+    buttons = f"""          <a class="ltx-btn ltx-btn--primary" data-track-id="contact_sales_btn" href="{LTX_SALES_URL}" target="_blank" rel="noopener noreferrer">Talk to Sales</a>
+          <a id="try-now-btn" class="ltx-btn ltx-btn--secondary" href="{LTX_TRY_NOW_URL}" target="_blank" rel="noopener noreferrer">Try Now</a>"""
     if prefix == "rail":
         return f"""        <div class="rail__ctas">
-          <p class="rail__ctas-lead heading-style-h3">Questions? We&rsquo;re happy to help.</p>
+          <p class="rail__ctas-lead heading-style-h3">Train your first LoRA on LTX</p>
           <div class="rail__ctas-actions nav-ctas">
 {buttons}
           </div>
